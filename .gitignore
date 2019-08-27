@@ -11,3 +11,8 @@
 /build
 /captures
 .externalNativeBuild
+getlayout.jks
+getlayout.pem
+getlayout.jks.old
+private_key.pepk
+upload_cert.der
