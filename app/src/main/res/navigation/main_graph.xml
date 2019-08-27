@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/conversionsFragment">
+
+    <fragment
+        android:id="@+id/conversionsFragment"
+        android:name="ru.f13.getlayout.ui.fragments.ConversionsFragment"
+        android:label="conversions_fragment"
+        tools:layout="@layout/fragment_conversions">
+        <!--        <action-->
+        <!--            android:id="@+id/action_listFragment_to_detailFragment"-->
+        <!--            app:popUpToInclusive="true"-->
+        <!--            app:destination="@id/detailFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ru.f13.getlayout.ui.fragments.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/fragment_settings" >
+        <!--<action-->
+            <!--android:id="@+id/action_listFragment_to_detailFragment"-->
+            <!--app:destination="@id/detailFragment" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="ru.f13.getlayout.ui.fragments.AboutFragment"
+        android:label="about_fragment"
+        tools:layout="@layout/fragment_about" >
+        <!--<action-->
+        <!--android:id="@+id/action_listFragment_to_detailFragment"-->
+        <!--app:destination="@id/detailFragment" />-->
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_conversionsFragment"
+        app:destination="@id/conversionsFragment"
+        app:popUpTo="@+id/conversionsFragment"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_global_settingsFragment"
+        app:destination="@id/settingsFragment"
+        app:popUpTo="@id/settingsFragment"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_global_aboutFragment"
+        app:destination="@id/aboutFragment"
+        app:popUpTo="@+id/aboutFragment"
+        app:popUpToInclusive="true" />
+
+</navigation>

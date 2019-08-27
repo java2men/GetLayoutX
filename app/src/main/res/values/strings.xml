@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Получи расладку</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Получи раскладку</string>
+    <!--<string name="nav_header_subtitle">android.studio@android.com</string>-->
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_conversions">Конвертация</string>
+    <string name="menu_delete_history">Удалить историю</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_about">О приложении</string>
+
+    <string name="text_russian">русская</string>
+    <string name="text_english">английская</string>
+
+    <string name="text_convert">конвертировать</string>
+
+    <string name="notification_copy_result">Результат скопирован</string>
+
+    <string name="send_to">Отправить через</string>
+
+    <string name="exit_dialog_title">Выйти?</string>
+    <string name="exit_dialog_message">Вы действительно хотите это сделать?</string>
+    <string name="exit_dialog_positive_button">Да</string>
+    <string name="exit_dialog_negative_button">Нет</string>
+
+    <string name="save_data_title">Сохранять данные</string>
+    <string name="save_data_summary">Сохранять ввод, результат и настройки языка</string>
+    <string name="not_keyboard_start_title">Не показывать клавиатуру</string>
+    <string name="not_keyboard_start_summary">Не показывать клавиатуру при старте приложения?</string>
+    <string name="exit_alert_title">Не уведомлять о выходе</string>
+    <string name="exit_alert_summary">Не задавать вопрос о выходе из приложения?</string>
+
+    <string name="click_exit_application">Нажмите еще раз для выхода из приложения</string>
+
+    <string name="about_summary">
+        <![CDATA[
+        <div>Приложение \"Получи раскладку!\"</div>
+        <div>версия %1$s</div>
+        <div align="center">Приложение \"Получи раскладку!\" позволяет <b>получить</b> для вашего текста нужную раскладку клавиатуры PC в различных языковых вариантах.</div>
+        <div align="center">В оформлении приложения использованы пиктограммы проекта flaticon.com.</div>
+        <div>© 2014 Get layout!</div>
+        ]]>
+    </string>
+
+    <string name="caps_lock">Caps\nLock</string>
+
+    <string name="delete_for">Удалить \"%1$s\" ?</string>
+
+    <string name="yes">Да</string>
+
+</resources>
