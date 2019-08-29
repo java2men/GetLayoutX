@@ -1,5 +1,6 @@
 package ru.f13.getlayout.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
@@ -89,6 +92,7 @@ public class ConversionsFragment extends Fragment {
         return mBinding.getRoot();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -136,34 +140,52 @@ public class ConversionsFragment extends Fragment {
             }
         });
 
+        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mBinding.tietInput.clearFocus();
+                return false;
+            }
+        };
+
+        mBinding.rvConversions.setOnTouchListener(onTouchListener);
+
         mBinding.tietInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
                 selectTvInput(hasFocus);
 
+                if (hasFocus) {
+                    mBinding.clModifiers.setVisibility(View.VISIBLE);
+                } else {
+                    mBinding.clModifiers.setVisibility(View.GONE);
+                }
+
             }
         });
+
+        TooltipCompat.setTooltipText(mBinding.ivInfoModifiers, getString(R.string.info_modifiers));
 
         mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
 
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mBinding.swShift.isChecked() && !mBinding.swCapsLock.isChecked()) {
+                if (mBinding.cbShift.isChecked() && !mBinding.cbCapsLock.isChecked()) {
                     mBinding.tietInput.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
-                } else if (mBinding.swCapsLock.isChecked() && !mBinding.swShift.isChecked()) {
+                } else if (mBinding.cbCapsLock.isChecked() && !mBinding.cbShift.isChecked()) {
                     mBinding.tietInput.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
-                } else if (mBinding.swShift.isChecked() && mBinding.swCapsLock.isChecked()) {
+                } else if (mBinding.cbShift.isChecked() && mBinding.cbCapsLock.isChecked()) {
                     mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
-                }  else if (!mBinding.swShift.isChecked() && !mBinding.swCapsLock.isChecked()) {
+                }  else if (!mBinding.cbShift.isChecked() && !mBinding.cbCapsLock.isChecked()) {
                     mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
                 }
             }
         };
 
-        mBinding.swShift.setOnCheckedChangeListener(onCheckedChangeListener);
-        mBinding.swCapsLock.setOnCheckedChangeListener(onCheckedChangeListener);
+        mBinding.cbShift.setOnCheckedChangeListener(onCheckedChangeListener);
+        mBinding.cbCapsLock.setOnCheckedChangeListener(onCheckedChangeListener);
 
         mBinding.tietInput.addTextChangedListener(new TextWatcher() {
 
@@ -188,8 +210,8 @@ public class ConversionsFragment extends Fragment {
                         unionKeyboard(
                                 convertLayout.getKeyboard(inputCode),
                                 convertLayout.getKeyboard(resultCode),
-                                mBinding.swShift.isChecked(),
-                                mBinding.swCapsLock.isChecked()
+                                mBinding.cbShift.isChecked(),
+                                mBinding.cbCapsLock.isChecked()
                         );
 
                 lastResultText = convertLayout.getResultText(beforeInputText, afterInputText, lastResultText);
@@ -204,8 +226,6 @@ public class ConversionsFragment extends Fragment {
                 //отправлять только непустые данные
                 if (editable != null && !TextUtils.isEmpty(editable.toString())) {
                     String inputText = editable.toString();
-//                    boolean shift = mBinding.swShift.isChecked();
-//                    boolean capsLock = mBinding.swCapsLock.isChecked();
                     mViewModel.addConversionText(inputText, lastResultText);
 
                     editable.clear();
@@ -308,7 +328,7 @@ public class ConversionsFragment extends Fragment {
                     isSaveData,
                     inputCode,
                     resultCode,
-                    mBinding.swCapsLock.isChecked()
+                    mBinding.cbCapsLock.isChecked()
             ));
         } else {
             mViewModel.deleteAllConversions();

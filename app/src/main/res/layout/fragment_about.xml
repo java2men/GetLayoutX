@@ -25,6 +25,7 @@
             android:textAppearance="@style/TextRegular"
             android:textColor="@color/colorGray2"
             android:textSize="18sp"
+            android:textIsSelectable="true"
             tools:text="@string/about_summary" />
 
     </FrameLayout>
