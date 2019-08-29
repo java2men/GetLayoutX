@@ -28,6 +28,12 @@ import ru.f13.getlayout.util.convert.models.Version;
  */
 public class ConvertLayout {
 
+    public static final String MODIFIER_NONE = "none";
+    public static final String MODIFIER_SHIFT = "shift";
+    public static final String MODIFIER_CAPS = "caps";
+    public static final String MODIFIER_CAPS_SHIFT = "caps+shift";
+    public static final String MODIFIER_CTRL_CAPS = "ctrl+caps";
+
     /**
      * Код русской раскладки
      */
@@ -243,12 +249,9 @@ public class ConvertLayout {
                 xmlPullParser.next();
             }
 
-        } catch (XmlPullParserException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            keyboard = null;
         }
 
         return keyboard;
@@ -259,7 +262,7 @@ public class ConvertLayout {
      * @param inputKeyboard объект исходной клавиатуры
      * @param resultKeyboard объект результирующей клавиатуры
      */
-    public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard) {
+    public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard, boolean shift, boolean capsLock) {
 
         if (inputKeyboard == null || resultKeyboard == null) {
             return;
@@ -273,64 +276,69 @@ public class ConvertLayout {
         KeyMap resultKeyMap;
         unionMaps = new ArrayList<>();
 
+        String modifier = MODIFIER_NONE;
 
-//        for (int i = 0; i < inputKeyboard.getKeyMaps().size(); i++) {
-//            inputKeyMap = inputKeyboard.getKeyMaps().get(i);
-//            resultKeyMap = resultKeyboard.getKeyMaps().get(i);
-//
-//            for (Map mapIKM : inputKeyMap.getMaps()) {
-//                for (Map mapRKM : resultKeyMap.getMaps()) {
-//                    if (mapIKM.getIso().equals(mapRKM.getIso())) {
-//                        unionMaps.add(new UnionMap(mapIKM, mapRKM));
-//                        continue;
-//                    }
-//                }
-//            }
-//        }
+        if (shift && !capsLock) {
+            modifier = MODIFIER_SHIFT;
+        } else if (!shift && capsLock) {
+            modifier = MODIFIER_CAPS;
+        } else if (shift && capsLock) {
+            modifier = MODIFIER_CAPS_SHIFT;
+        }
 
-        for (int i = 0; i < inputKeyboard.getKeyMaps().size(); i++) {
+        inputKeyMap = findKeyMap(inputKeyboard, modifier);
+        if (inputKeyMap == null) {
+            return;
+        }
 
-            inputKeyMap = inputKeyboard.getKeyMaps().get(i);
-            if (inputKeyMap == null) {
-                continue;
-            }
+        resultKeyMap = findKeyMap(resultKeyboard, modifier);
+        if (resultKeyMap == null) {
+            return;
+        }
 
-            resultKeyMap = null;
-            for (int j = 0; j < resultKeyboard.getKeyMaps().size(); j++) {
-
-                KeyMap findKeyMap = resultKeyboard.getKeyMaps().get(j);
-                if (findKeyMap == null) {
-                    continue;
-                }
-
-                boolean isEmptyOrNullModifiersInput = inputKeyMap.getModifiers() == null || inputKeyMap.getModifiers().equals("");
-                boolean isEmptyOrNullModifiersFind = findKeyMap.getModifiers() == null || findKeyMap.getModifiers().equals("");
-                if ((isEmptyOrNullModifiersInput && isEmptyOrNullModifiersFind)) {
-                    resultKeyMap = findKeyMap;
-                    break;
-                }
-
-                if (inputKeyMap.getModifiers().equals(findKeyMap.getModifiers())) {
-                    resultKeyMap = findKeyMap;
-                    break;
-                }
-
-            }
-
-            if (resultKeyMap == null) {
-                continue;
-            }
-
-            for (Map mapIKM : inputKeyMap.getMaps()) {
-                for (Map mapRKM : resultKeyMap.getMaps()) {
-                    if (mapIKM.getIso().equals(mapRKM.getIso())) {
-                        unionMaps.add(new UnionMap(mapIKM, mapRKM));
-                        continue;
-                    }
+        for (Map mapIKM : inputKeyMap.getMaps()) {
+            for (Map mapRKM : resultKeyMap.getMaps()) {
+                if (mapIKM.getIso().equals(mapRKM.getIso())) {
+                    unionMaps.add(new UnionMap(mapIKM, mapRKM));
                 }
             }
         }
 
+    }
+
+    /**
+     * Найти {@link KeyMap}
+     * @param keyboard клавиатура
+     * @param modifier модификатор
+     * @return найденный объект {@link KeyMap}
+     */
+    private KeyMap findKeyMap (Keyboard keyboard, String modifier) {
+
+        if (keyboard == null) {
+            return null;
+        }
+
+        ArrayList<KeyMap> keyMaps = keyboard.getKeyMaps();
+        if (keyMaps == null) {
+            return null;
+        }
+
+        KeyMap findKeyMap = null;
+
+        for (int i = 0; i < keyMaps.size(); i++) {
+            KeyMap keyMap = keyMaps.get(i);
+
+            if (keyMap.getModifiers() == null && modifier.equals(MODIFIER_NONE)) {
+                findKeyMap = keyMap;
+                break;
+            } else if (keyMap.getModifiers() != null && keyMap.getModifiers().equals(modifier)) {
+                findKeyMap = keyMap;
+                break;
+            }
+
+        }
+
+        return findKeyMap;
     }
 
     /**
@@ -341,7 +349,7 @@ public class ConvertLayout {
      * @param capsLock true - capsLock включен, false - capsLock выключен
      * @return результирующий текст конвертации
      */
-    public String getResultText(String inputTextBefore, String inputTextAfter, String resultTextBefore, boolean capsLock) {
+    public String getResultText(String inputTextBefore, String inputTextAfter, String resultTextBefore) {
         StringBuilder sbInputText = new StringBuilder(inputTextAfter);
         StringBuilder sbResultText = new StringBuilder();
         for (int i = 0; i < inputTextAfter.length(); i++) {
@@ -355,7 +363,7 @@ public class ConvertLayout {
             } /*else {
                 looking = String.valueOf(inputTextAfter.charAt(i));//что ищем
             }*/
-            String found = findInUnionMap(looking, capsLock);//найденное
+            String found = findInUnionMap(looking);//найденное
             if (found.equals("")) {
                 sbResultText.append(looking);
             } else {
@@ -368,15 +376,14 @@ public class ConvertLayout {
     /**
      * Получить результирующий текст конвертации
      * @param inputText исходный текст
-     * @param capsLock true - capsLock включен, false - capsLock выключен
      * @return результирующий текст
      */
-    public String getResultText(String inputText, boolean capsLock) {
+    public String getResultText(String inputText) {
 
         StringBuilder sbResultText = new StringBuilder();
         for (int i = 0; i < inputText.length(); i++) {
             String looking = String.valueOf(inputText.charAt(i));//что ищем
-            String found = findInUnionMap(looking, capsLock);//найденное
+            String found = findInUnionMap(looking);//найденное
             if (found.equals("")) {
                 sbResultText.append(looking);
             } else {
@@ -392,19 +399,14 @@ public class ConvertLayout {
      * @param capsLock true - capsLock включен, false - capsLock выключен
      * @return найденный сконвертированный символ
      */
-    private String findInUnionMap(String find, boolean capsLock) {
+    private String findInUnionMap(String find) {
 
         for (UnionMap unionMap : unionMaps) {
             String modifiers = unionMap.getInputMap().getKeyMap().getModifiers();
-            boolean isCapsLock;
-            if (modifiers != null) {
-                isCapsLock = modifiers.contains("caps");
-            } else {
-                isCapsLock = false;
-            }
+
             String inputTo = unescapeJava(unionMap.getInputMap().getTo());
             inputTo = unescapeHtml(inputTo);
-            if (inputTo.equals(find) && isCapsLock == capsLock) {
+            if (inputTo.equals(find)) {
                 String resultTo = unescapeJava(unionMap.getResultMap().getTo());
                 resultTo = unescapeHtml(resultTo);
                 //if (resultTo.indexOf("\\u") != -1) {

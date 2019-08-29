@@ -71,29 +71,49 @@ public class ConversionsViewModel extends AndroidViewModel {
      * @param inputText исходный текст
      * @param capsLock true - Caps Lock включен, false - Caps Lock отключен
      */
+//    public void addConversionText(
+//            String inputCode,
+//            String resultCode,
+//            String inputText,
+//            boolean shift,
+//            boolean capsLock
+//    ) {
+//
+//        ConversionEntity conversion = new ConversionEntity();
+//
+//        ConvertLayout convertLayout = new ConvertLayout(getApplication());
+//        convertLayout.
+//                unionKeyboard(
+//                        convertLayout.getKeyboard(inputCode),
+//                        convertLayout.getKeyboard(resultCode),
+//                        shift,
+//                        capsLock
+//                );
+//        conversion.setInputText(inputText);
+//        conversion.setResultText(convertLayout.getResultText(inputText));
+//
+//        List<ConversionEntity> conversions = new ArrayList<>(0);
+//        conversions.add(conversion);
+//        mRepository.insertConversions(conversions);
+//
+//    }
+
     public void addConversionText(
-            String inputCode,
-            String resultCode,
             String inputText,
-            boolean capsLock
+            String resultText
     ) {
 
         ConversionEntity conversion = new ConversionEntity();
 
-        ConvertLayout convertLayout = new ConvertLayout(getApplication());
-        convertLayout.
-                unionKeyboard(
-                        convertLayout.getKeyboard(inputCode),
-                        convertLayout.getKeyboard(resultCode)
-                );
         conversion.setInputText(inputText);
-        conversion.setResultText(convertLayout.getResultText(inputText, capsLock));
+        conversion.setResultText(resultText);
 
         List<ConversionEntity> conversions = new ArrayList<>(0);
         conversions.add(conversion);
         mRepository.insertConversions(conversions);
 
     }
+
 
     /**
      * Удалить все конвертации из базы ланных

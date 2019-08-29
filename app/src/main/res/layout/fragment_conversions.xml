@@ -14,6 +14,9 @@
             name="resultText"
             type="String" />
         <variable
+            name="shift"
+            type="boolean" />
+        <variable
             name="capsLock"
             type="boolean" />
         <import type="android.view.View"/>
@@ -44,6 +47,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swShift"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/shift"
+                    android:textAppearance="@style/TextRegular"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp"
+                    android:checked="@{capsLock}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/clDir"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     style="@style/RippleLightStyle"
                     android:id="@+id/clDir"
@@ -51,7 +70,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/swCapsLock"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/swShift"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -171,7 +190,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="16dp"
                     android:imeOptions="actionDone"
-                    android:inputType="text|textMultiLine"
+                    android:inputType="textVisiblePassword|textNoSuggestions|textMultiLine"
                     android:maxHeight="128dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/ivSend"

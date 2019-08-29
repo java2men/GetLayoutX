@@ -45,6 +45,7 @@
         ]]>
     </string>
 
+    <string name="shift">Shift</string>
     <string name="caps_lock">Caps\nLock</string>
 
     <string name="delete_for">Удалить \"%1$s\" ?</string>

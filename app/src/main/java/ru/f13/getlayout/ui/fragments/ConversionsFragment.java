@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ import ru.f13.getlayout.data.db.entity.ConversionEntity;
 import ru.f13.getlayout.data.model.ConversionOptions;
 import ru.f13.getlayout.ui.adapters.ConversionsAdapter;
 import ru.f13.getlayout.ui.adapters.OnDeleteConversionListener;
+import ru.f13.getlayout.util.InputFilterAllLower;
 import ru.f13.getlayout.util.GLUtils;
 import ru.f13.getlayout.util.convert.ConvertLayout;
 import ru.f13.getlayout.viewmodel.ConversionsViewModel;
@@ -43,6 +45,12 @@ public class ConversionsFragment extends Fragment {
     private FragmentConversionsBinding mBinding;
 
     private ConversionsViewModel mViewModel;
+
+    private ConvertLayout convertLayout;
+    private String beforeInputText = "";
+    private String afterInputText = "";
+    private String lastResultText = "";
+
     /**
      * Код исходной раскладки
      */
@@ -84,6 +92,8 @@ public class ConversionsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        convertLayout = new ConvertLayout(mBinding.getRoot().getContext());
 
         mBinding.clDir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,15 +145,56 @@ public class ConversionsFragment extends Fragment {
             }
         });
 
-    }
+        mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mBinding.swShift.isChecked() && !mBinding.swCapsLock.isChecked()) {
+                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+                } else if (mBinding.swCapsLock.isChecked() && !mBinding.swShift.isChecked()) {
+                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+                } else if (mBinding.swShift.isChecked() && mBinding.swCapsLock.isChecked()) {
+                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
+                }  else if (!mBinding.swShift.isChecked() && !mBinding.swCapsLock.isChecked()) {
+                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
+                }
+            }
+        };
 
-        mViewModel = ViewModelProviders.of(this).get(ConversionsViewModel.class);
+        mBinding.swShift.setOnCheckedChangeListener(onCheckedChangeListener);
+        mBinding.swCapsLock.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        final boolean capsLock = mBinding.swCapsLock.isChecked();
+        mBinding.tietInput.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                beforeInputText = s.toString();
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                afterInputText = s.toString();
+
+
+                convertLayout.
+                        unionKeyboard(
+                                convertLayout.getKeyboard(inputCode),
+                                convertLayout.getKeyboard(resultCode),
+                                mBinding.swShift.isChecked(),
+                                mBinding.swCapsLock.isChecked()
+                        );
+
+                lastResultText = convertLayout.getResultText(beforeInputText, afterInputText, lastResultText);
+            }
+        });
 
         mBinding.ivSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,11 +204,97 @@ public class ConversionsFragment extends Fragment {
                 //отправлять только непустые данные
                 if (editable != null && !TextUtils.isEmpty(editable.toString())) {
                     String inputText = editable.toString();
-                    mViewModel.addConversionText(inputCode, resultCode, inputText, capsLock);
+//                    boolean shift = mBinding.swShift.isChecked();
+//                    boolean capsLock = mBinding.swCapsLock.isChecked();
+                    mViewModel.addConversionText(inputText, lastResultText);
+
                     editable.clear();
+
                 }
             }
         });
+
+    }
+
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mViewModel = ViewModelProviders.of(this).get(ConversionsViewModel.class);
+
+
+
+
+
+//        mBinding.tietInput.addTextChangedListener(new TextWatcher() {
+//
+//            //текст до
+//            String before;
+//            String after;
+//            //позиция курсора для текста был до
+//            int selectAfter;
+//            //позиция курсора для текста после
+//            int selectBefore;
+//            TextInputEditText tiet1 = mBinding.tietInput;
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                before = s.toString();
+//                selectBefore = start;
+//                //System.out.println("beforeTextChanged");
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                selectAfter = start + count;
+//                String newText = s.subSequence(selectBefore, selectAfter).toString();
+//                after = s.toString();
+//
+//
+//
+////                String newText = s.subSequence(selectBefore, selectAfter).toString();
+////                int color = ContextCompat.getColor(mBinding.getRoot().getContext(), R.color.colorGray2);
+////
+////                if (mBinding.swShift.isChecked()) {
+////                    newText = newText.toUpperCase();
+////                    color = Color.BLUE;
+////                } else if (mBinding.swCapsLock.isChecked()) {
+////                    newText = newText.toLowerCase();
+////                    color = Color.GREEN;
+////                } else if (mBinding.swShift.isChecked() && mBinding.swCapsLock.isChecked()) {
+////                    color = Color.RED;
+////                }
+////
+////                SpannableString newSpan = new SpannableString(newText);
+////                newSpan.setSpan(new ForegroundColorSpan(color), 0, newSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//
+//                //System.out.println("onTextChanged");
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//                //отключим отслеживание afterTextChanged, чтобы не попасть в рекуррсию
+//                TextWatcher tw = this;
+//                tiet1.removeTextChangedListener(tw);
+//
+//                //если удовлетворяет паттерну формата ввода, то установим текст и курсор
+//                tiet1.setText(after);
+//                tiet1.setSelection(selectAfter);
+//
+//                //снова отслеживаем afterTextChanged
+//                tiet1.addTextChangedListener(tw);
+//
+//            }
+//
+//        });
+
+
 
         subscribeUi(mViewModel);
     }
