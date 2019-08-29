@@ -28,10 +28,25 @@ import ru.f13.getlayout.util.convert.models.Version;
  */
 public class ConvertLayout {
 
+    /**
+     * Модификатор отсутствует
+     */
     public static final String MODIFIER_NONE = "none";
+    /**
+     * Модификатор shift
+     */
     public static final String MODIFIER_SHIFT = "shift";
+    /**
+     * Модификатор caps
+     */
     public static final String MODIFIER_CAPS = "caps";
+    /**
+     * Модификатор caps+shift
+     */
     public static final String MODIFIER_CAPS_SHIFT = "caps+shift";
+    /**
+     * Модификатор ctrl+caps
+     */
     public static final String MODIFIER_CTRL_CAPS = "ctrl+caps";
 
     /**
@@ -94,8 +109,6 @@ public class ConvertLayout {
 
         return null;
     }
-
-    //private Keyboard loadKeyboard(int xml, Context context) {
 
     /**
      * Загрузить раскладку клавиатуру и получить объект клавиатуры
@@ -261,6 +274,8 @@ public class ConvertLayout {
      * Объеденить клавиатуры раскладок, которые будут участвовать в конвертации
      * @param inputKeyboard объект исходной клавиатуры
      * @param resultKeyboard объект результирующей клавиатуры
+     * @param shift true - задействовать модификатор shift, false - не задействовать модификатор shift
+     * @param capsLock true - задействовать модификатор capsLock, false - не задействовать модификатор capsLock
      */
     public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard, boolean shift, boolean capsLock) {
 
@@ -395,13 +410,11 @@ public class ConvertLayout {
     /**
      * Найти символ в объеденной карте символов раскладок
      * @param find искомый символ
-     * @param capsLock true - capsLock включен, false - capsLock выключен
      * @return найденный сконвертированный символ
      */
     private String findInUnionMap(String find) {
 
         for (UnionMap unionMap : unionMaps) {
-            String modifiers = unionMap.getInputMap().getKeyMap().getModifiers();
 
             String inputTo = unescapeJava(unionMap.getInputMap().getTo());
             inputTo = unescapeHtml(inputTo);

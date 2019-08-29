@@ -10,11 +10,10 @@ import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.f13.getlayout.data.DataRepository;
 import ru.f13.getlayout.GLApp;
+import ru.f13.getlayout.data.DataRepository;
 import ru.f13.getlayout.data.db.entity.ConversionEntity;
 import ru.f13.getlayout.data.model.ConversionOptions;
-import ru.f13.getlayout.util.convert.ConvertLayout;
 
 public class ConversionsViewModel extends AndroidViewModel {
 
@@ -57,47 +56,11 @@ public class ConversionsViewModel extends AndroidViewModel {
         return mObservableConversions;
     }
 
-//    public LiveData<List<ConversionEntity>> insertAndGetConversions(ConversionEntity conversion) {
-//        List<ConversionEntity> conversions = new ArrayList<>(0);
-//        conversions.add(conversion);
-//        mRepository.insertConversions(conversions);
-//        return mRepository.getConversions();
-//    }
-
     /**
      * Добавить текст конвертации
-     * @param inputCode исходный код конвертации
-     * @param resultCode результирующий код конвертации
      * @param inputText исходный текст
-     * @param capsLock true - Caps Lock включен, false - Caps Lock отключен
+     * @param resultText результирующий текст
      */
-//    public void addConversionText(
-//            String inputCode,
-//            String resultCode,
-//            String inputText,
-//            boolean shift,
-//            boolean capsLock
-//    ) {
-//
-//        ConversionEntity conversion = new ConversionEntity();
-//
-//        ConvertLayout convertLayout = new ConvertLayout(getApplication());
-//        convertLayout.
-//                unionKeyboard(
-//                        convertLayout.getKeyboard(inputCode),
-//                        convertLayout.getKeyboard(resultCode),
-//                        shift,
-//                        capsLock
-//                );
-//        conversion.setInputText(inputText);
-//        conversion.setResultText(convertLayout.getResultText(inputText));
-//
-//        List<ConversionEntity> conversions = new ArrayList<>(0);
-//        conversions.add(conversion);
-//        mRepository.insertConversions(conversions);
-//
-//    }
-
     public void addConversionText(
             String inputText,
             String resultText

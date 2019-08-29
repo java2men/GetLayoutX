@@ -21,14 +21,6 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class ConvertLayoutInstrumentedTest {
 
-//    @Test
-//    public void useAppContext() {
-//        // Context of the app under test.
-//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-//
-//        assertEquals("ru.f13.getlayout", appContext.getPackageName());
-//    }
-
     @Test
     public void conversionIsCorrectRuToEn() {
 
@@ -39,12 +31,14 @@ public class ConvertLayoutInstrumentedTest {
         convertLayout.
                 unionKeyboard(
                         convertLayout.getKeyboard(ConvertLayout.CODE_RU),
-                        convertLayout.getKeyboard(ConvertLayout.CODE_EN)
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        false,
+                        false
                 );
 
         String realInputText = "ё1234567890-=йцукенгшщзхъ\\фывапролджэячсмитьбю.";
         String realResultText = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
-        String resultText = convertLayout.getResultText(realInputText, false);
+        String resultText = convertLayout.getResultText(realInputText);
 
         Assert.assertEquals(resultText, realResultText);
 
@@ -60,12 +54,14 @@ public class ConvertLayoutInstrumentedTest {
         convertLayout.
                 unionKeyboard(
                         convertLayout.getKeyboard(ConvertLayout.CODE_RU),
-                        convertLayout.getKeyboard(ConvertLayout.CODE_EN)
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        true,
+                        false
                 );
 
         String realInputText = "Ё!\"№;%:?*()_+ЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,";
         String realResultText = "~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?";
-        String resultText = convertLayout.getResultText(realInputText, false);
+        String resultText = convertLayout.getResultText(realInputText);
 
         Assert.assertEquals(resultText, realResultText);
 
@@ -81,12 +77,14 @@ public class ConvertLayoutInstrumentedTest {
         convertLayout.
                 unionKeyboard(
                         convertLayout.getKeyboard(ConvertLayout.CODE_RU),
-                        convertLayout.getKeyboard(ConvertLayout.CODE_EN)
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        false,
+                        true
                 );
 
         String realInputText = "Ё1234567890-=ЙЦУКЕНГШЩЗХЪ\\ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ.";
         String realResultText = "`1234567890-=QWERTYUIOP[]\\ASDFGHJKL;'ZXCVBNM,./";
-        String resultText = convertLayout.getResultText(realInputText, true);
+        String resultText = convertLayout.getResultText(realInputText);
 
         Assert.assertEquals(resultText, realResultText);
 
@@ -102,12 +100,111 @@ public class ConvertLayoutInstrumentedTest {
         convertLayout.
                 unionKeyboard(
                         convertLayout.getKeyboard(ConvertLayout.CODE_RU),
-                        convertLayout.getKeyboard(ConvertLayout.CODE_EN)
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        true,
+                        true
                 );
 
         String realInputText = "ё!\"№;%:?*()_+йцукенгшщзхъ/фывапролджэячсмитьбю,";
         String realResultText = "~!@#$%^&*()_+qwertyuiop{}|asdfghjkl:\"zxcvbnm<>?";
-        String resultText = convertLayout.getResultText(realInputText, false);
+        String resultText = convertLayout.getResultText(realInputText);
+
+        Assert.assertEquals(resultText, realResultText);
+
+    }
+
+
+
+
+
+
+    @Test
+    public void conversionIsCorrectEnToRu() {
+
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        ConvertLayout convertLayout = new ConvertLayout(appContext);
+
+        convertLayout.
+                unionKeyboard(
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        convertLayout.getKeyboard(ConvertLayout.CODE_RU),
+                        false,
+                        false
+                );
+
+        String realInputText = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
+        String realResultText = "ё1234567890-=йцукенгшщзхъ\\фывапролджэячсмитьбю.";
+        String resultText = convertLayout.getResultText(realInputText);
+
+        Assert.assertEquals(resultText, realResultText);
+
+    }
+
+    @Test
+    public void conversionIsCorrectEnToRuShift() {
+
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        ConvertLayout convertLayout = new ConvertLayout(appContext);
+
+        convertLayout.
+                unionKeyboard(
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        convertLayout.getKeyboard(ConvertLayout.CODE_RU),
+                        true,
+                        false
+                );
+
+        String realInputText = "~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?";
+        String realResultText = "Ё!\"№;%:?*()_+ЙЦУКЕНГШЩЗХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,";
+        String resultText = convertLayout.getResultText(realInputText);
+
+        Assert.assertEquals(resultText, realResultText);
+
+    }
+
+    @Test
+    public void conversionIsCorrectEnToRuCaps() {
+
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        ConvertLayout convertLayout = new ConvertLayout(appContext);
+
+        convertLayout.
+                unionKeyboard(
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        convertLayout.getKeyboard(ConvertLayout.CODE_RU),
+                        false,
+                        true
+                );
+
+        String realInputText = "`1234567890-=QWERTYUIOP[]\\ASDFGHJKL;'ZXCVBNM,./";
+        String realResultText = "Ё1234567890-=ЙЦУКЕНГШЩЗХЪ\\ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ.";
+        String resultText = convertLayout.getResultText(realInputText);
+
+        Assert.assertEquals(resultText, realResultText);
+
+    }
+
+    @Test
+    public void conversionIsCorrectEnToRuCapsShift() {
+
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        ConvertLayout convertLayout = new ConvertLayout(appContext);
+
+        convertLayout.
+                unionKeyboard(
+                        convertLayout.getKeyboard(ConvertLayout.CODE_EN),
+                        convertLayout.getKeyboard(ConvertLayout.CODE_RU),
+                        true,
+                        true
+                );
+
+        String realInputText = "~!@#$%^&*()_+qwertyuiop{}|asdfghjkl:\"zxcvbnm<>?";
+        String realResultText = "ё!\"№;%:?*()_+йцукенгшщзхъ/фывапролджэячсмитьбю,";
+        String resultText = convertLayout.getResultText(realInputText);
 
         Assert.assertEquals(resultText, realResultText);
 

@@ -273,7 +273,7 @@ public class ConversionsFragment extends Fragment {
      * @param viewModel объект {@link androidx.lifecycle.ViewModel}
      */
     private void subscribeUi(final ConversionsViewModel viewModel) {
-        // Update the list when the data changes
+
         viewModel.getConversions().observe(this, new Observer<List<ConversionEntity>>() {
             @Override
             public void onChanged(@Nullable List<ConversionEntity> conversions) {
@@ -285,7 +285,6 @@ public class ConversionsFragment extends Fragment {
                     mBinding.rvConversions.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //mBinding.rvConversions.smoothScrollToPosition(mConversionsAdapter.getItemCount() - 1);
                             mBinding.rvConversions.scrollToPosition(mConversionsAdapter.getItemCount() - 1);
                         }
                     }, 10);
@@ -293,8 +292,7 @@ public class ConversionsFragment extends Fragment {
                 } else {
                     mBinding.setIsLoading(true);
                 }
-                // espresso does not know how to wait for data binding's loop so we execute changes
-                // sync.
+
                 mBinding.executePendingBindings();
             }
         });

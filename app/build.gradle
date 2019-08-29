@@ -7,7 +7,7 @@ android {
         applicationId "ru.f13.getlayout"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 4
+        versionCode 5
         versionName "3.0.2b"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
