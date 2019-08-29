@@ -3,6 +3,9 @@ package ru.f13.getlayout.util;
 import android.text.InputFilter;
 import android.text.Spanned;
 
+/**
+ * Фильтр понижения регистра для текста редактора
+ */
 public class InputFilterAllLower extends InputFilter.AllCaps {
 
     @Override

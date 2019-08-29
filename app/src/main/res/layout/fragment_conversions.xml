@@ -13,12 +13,6 @@
         <variable
             name="resultText"
             type="String" />
-        <variable
-            name="shift"
-            type="boolean" />
-        <variable
-            name="capsLock"
-            type="boolean" />
         <import type="android.view.View"/>
     </data>
 

@@ -27,7 +27,7 @@
     <string name="exit_dialog_negative_button">Нет</string>
 
     <string name="save_data_title">Сохранять данные</string>
-    <string name="save_data_summary">Сохранять ввод, результат и настройки языка</string>
+    <string name="save_data_summary">Сохранять историю конвертации и направление языка</string>
     <string name="not_keyboard_start_title">Не показывать клавиатуру</string>
     <string name="not_keyboard_start_summary">Не показывать клавиатуру при старте приложения?</string>
     <string name="exit_alert_title">Не уведомлять о выходе</string>

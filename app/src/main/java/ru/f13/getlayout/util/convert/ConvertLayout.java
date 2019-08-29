@@ -346,7 +346,6 @@ public class ConvertLayout {
      * @param inputTextBefore исходный текст до изменений
      * @param inputTextAfter исходный текст после изменений
      * @param resultTextBefore результирующий текст до изменений
-     * @param capsLock true - capsLock включен, false - capsLock выключен
      * @return результирующий текст конвертации
      */
     public String getResultText(String inputTextBefore, String inputTextAfter, String resultTextBefore) {

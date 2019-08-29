@@ -8,20 +8,17 @@ public class ConversionOptions {
     private boolean isSaveData;
     private String inputCode;
     private String resultCode;
-    private Boolean capsLock;
 
     /**
      * Конструктор
      * @param isSaveData true - сохранение данных разрешено, false - сохранение данных запрещено
      * @param inputCode исходный код раскладки
      * @param resultCode результирующий код раскладки
-     * @param capsLock true - caps lock включен, false - caps lock выключен
      */
-    public ConversionOptions(boolean isSaveData, String inputCode, String resultCode, Boolean capsLock) {
+    public ConversionOptions(boolean isSaveData, String inputCode, String resultCode) {
         this.isSaveData = isSaveData;
         this.inputCode = inputCode;
         this.resultCode = resultCode;
-        this.capsLock = capsLock;
     }
 
     /**
@@ -72,19 +69,4 @@ public class ConversionOptions {
         this.resultCode = resultCode;
     }
 
-    /**
-     * Проверить включение Caps Lock
-     * @return true - Caps Lock включен, false - Caps Lock выключен
-     */
-    public Boolean getCapsLock() {
-        return capsLock;
-    }
-
-    /**
-     *
-     * @param capsLock
-     */
-    public void setCapsLock(Boolean capsLock) {
-        this.capsLock = capsLock;
-    }
 }

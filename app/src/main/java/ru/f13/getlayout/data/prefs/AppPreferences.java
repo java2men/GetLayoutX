@@ -145,7 +145,7 @@ public class AppPreferences {
         return new SharedPreferenceConversionOptionsLiveData(
                 sharedPreferences,
                 PREF_KEY_CONVERSION_OPTIONS,
-                new ConversionOptions(isSave, ConvertLayout.CODE_RU, ConvertLayout.CODE_EN, false)
+                new ConversionOptions(isSave, ConvertLayout.CODE_RU, ConvertLayout.CODE_EN)
         );
 
     }

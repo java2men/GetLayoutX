@@ -52,6 +52,9 @@ public class ConversionsFragment extends Fragment {
     private ConvertLayout convertLayout;
     private String beforeInputText = "";
     private String afterInputText = "";
+    /**
+     * Хранить последний результат конвертации
+     */
     private String lastResultText = "";
 
     /**
@@ -124,7 +127,7 @@ public class ConversionsFragment extends Fragment {
         mConversionsAdapter.setOnDeleteConversionListener(new OnDeleteConversionListener() {
             @Override
             public void onDelete(final int id, String dateText) {
-                System.out.println("idConversion = " + dateText);
+
                 Context context = mBinding.rvConversions.getContext();
                 Snackbar snackbar = Snackbar.
                         make(mBinding.getRoot(), getString(R.string.delete_for, dateText), Snackbar.LENGTH_LONG).
@@ -167,6 +170,7 @@ public class ConversionsFragment extends Fragment {
 
         TooltipCompat.setTooltipText(mBinding.ivInfoModifiers, getString(R.string.info_modifiers));
 
+        //фильровать текст редактора в зависимости от модификатора
         mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
 
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -205,7 +209,7 @@ public class ConversionsFragment extends Fragment {
 
                 afterInputText = s.toString();
 
-
+                //конвертировать текст при изменении текста редактора
                 convertLayout.
                         unionKeyboard(
                                 convertLayout.getKeyboard(inputCode),
@@ -243,80 +247,8 @@ public class ConversionsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mViewModel = ViewModelProviders.of(this).get(ConversionsViewModel.class);
-
-
-
-
-
-//        mBinding.tietInput.addTextChangedListener(new TextWatcher() {
-//
-//            //текст до
-//            String before;
-//            String after;
-//            //позиция курсора для текста был до
-//            int selectAfter;
-//            //позиция курсора для текста после
-//            int selectBefore;
-//            TextInputEditText tiet1 = mBinding.tietInput;
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                before = s.toString();
-//                selectBefore = start;
-//                //System.out.println("beforeTextChanged");
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                selectAfter = start + count;
-//                String newText = s.subSequence(selectBefore, selectAfter).toString();
-//                after = s.toString();
-//
-//
-//
-////                String newText = s.subSequence(selectBefore, selectAfter).toString();
-////                int color = ContextCompat.getColor(mBinding.getRoot().getContext(), R.color.colorGray2);
-////
-////                if (mBinding.swShift.isChecked()) {
-////                    newText = newText.toUpperCase();
-////                    color = Color.BLUE;
-////                } else if (mBinding.swCapsLock.isChecked()) {
-////                    newText = newText.toLowerCase();
-////                    color = Color.GREEN;
-////                } else if (mBinding.swShift.isChecked() && mBinding.swCapsLock.isChecked()) {
-////                    color = Color.RED;
-////                }
-////
-////                SpannableString newSpan = new SpannableString(newText);
-////                newSpan.setSpan(new ForegroundColorSpan(color), 0, newSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//
-//
-//                //System.out.println("onTextChanged");
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//                //отключим отслеживание afterTextChanged, чтобы не попасть в рекуррсию
-//                TextWatcher tw = this;
-//                tiet1.removeTextChangedListener(tw);
-//
-//                //если удовлетворяет паттерну формата ввода, то установим текст и курсор
-//                tiet1.setText(after);
-//                tiet1.setSelection(selectAfter);
-//
-//                //снова отслеживаем afterTextChanged
-//                tiet1.addTextChangedListener(tw);
-//
-//            }
-//
-//        });
-
-
-
         subscribeUi(mViewModel);
+
     }
 
     @Override
@@ -327,8 +259,7 @@ public class ConversionsFragment extends Fragment {
             mViewModel.setConversionOptions(new ConversionOptions(
                     isSaveData,
                     inputCode,
-                    resultCode,
-                    mBinding.cbCapsLock.isChecked()
+                    resultCode
             ));
         } else {
             mViewModel.deleteAllConversions();
@@ -383,8 +314,6 @@ public class ConversionsFragment extends Fragment {
                     inputCode = conversionOptions.getInputCode();
                     resultCode = conversionOptions.getResultCode();
                     setConversionValueUI(mBinding.clDir, inputCode, false);
-
-                    mBinding.setCapsLock(conversionOptions.getCapsLock());
 
                     mBinding.executePendingBindings();
                 }
