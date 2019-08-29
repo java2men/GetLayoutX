@@ -19,7 +19,7 @@
         android:layout_gravity="start"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="8dp"
-        app:srcCompat="@drawable/ic_launcher_round" />
+        app:srcCompat="@drawable/ic_getlayout_round" />
 
     <TextView
         android:layout_width="match_parent"

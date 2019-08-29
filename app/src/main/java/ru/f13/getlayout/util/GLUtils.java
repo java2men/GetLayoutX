@@ -133,25 +133,23 @@ public class GLUtils {
 
     /**
      * Конвертировать количество точек на дюйм в количество пикселей
-     * @param context ссылка на контекст
      * @param dp количество точек на дюйм
      * @return количество пикселей
      */
-    public float dpToPx(Context context, int dp) {
+    public float dpToPx(int dp) {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dp,
-                context.getResources().getDisplayMetrics());
+                mContext.getResources().getDisplayMetrics());
     }
 
     /**
      * Конвертировать количество пикселей в количество точек на дюйм
-     * @param context ссылка на контекст
      * @param px количество пикселей
      * @return количество точек на дюйм
      */
-    public float pxToDp(Context context, int px){
+    public float pxToDp(int px){
 
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
         return px / (metrics.densityDpi / 160f);
     }
 

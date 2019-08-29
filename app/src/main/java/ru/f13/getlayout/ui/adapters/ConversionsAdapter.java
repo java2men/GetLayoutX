@@ -236,7 +236,9 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
             ClipData clip = ClipData.newPlainText("get-layout-result-conversion", text);
             clipboard.setPrimaryClip(clip);
             Toast toast = Toast.makeText(context, R.string.notification_copy_result, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
+            int offsetX = 0;
+            int offsetY = (int) GLUtils.getInstance(context).dpToPx(16);
+            toast.setGravity(Gravity.BOTTOM, offsetX, offsetY);
             toast.show();
     }
 

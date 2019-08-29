@@ -8,16 +8,17 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
@@ -168,7 +169,19 @@ public class ConversionsFragment extends Fragment {
             }
         });
 
-        TooltipCompat.setTooltipText(mBinding.ivInfoModifiers, getString(R.string.info_modifiers));
+        mBinding.ivInfoModifiers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = mBinding.ivInfoModifiers.getContext();
+                Toast toast =
+                        Toast.makeText(context, R.string.info_modifiers, Toast.LENGTH_LONG);
+                int offsetX = 0;
+                int offsetY = (int) GLUtils.getInstance(context).dpToPx(16);
+                toast.setGravity(Gravity.BOTTOM, offsetX, offsetY);
+
+                toast.show();
+            }
+        });
 
         //фильровать текст редактора в зависимости от модификатора
         mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
@@ -336,7 +349,7 @@ public class ConversionsFragment extends Fragment {
         set.clear(R.id.tvDir2, ConstraintSet.START);
         set.clear(R.id.tvDir2, ConstraintSet.END);
 
-        int marginPx = (int) glUtils.dpToPx(mBinding.getRoot().getContext(), 16);
+        int marginPx = (int) glUtils.dpToPx(16);
 
         if (inputCode.equals(ConvertLayout.CODE_RU)) {
             set.connect(R.id.tvDir1, ConstraintSet.START, R.id.clDir, ConstraintSet.START, marginPx);
