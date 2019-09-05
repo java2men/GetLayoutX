@@ -4,14 +4,28 @@
     <color name="colorPrimaryDark">#455A64</color>
     <color name="colorPrimaryLight">#CFD8DC</color>
     <color name="colorAccent">#607D8B</color>
+
     <color name="colorWhite">#FFFFFF</color>
-
-    <color name="colorGray1">#9E9E9E</color>
-    <color name="colorGray2">#757575</color>
-    <color name="colorGray3">#DADADA</color>
-<!--    <color name="colorGray3">#BDBDBD</color>-->
-    <color name="colorGray4">#F5F5F5</color>
-
     <color name="colorBlack">#212121</color>
+
+    <color name="colorContent">#757575</color>
+    <color name="colorBackground">#DADADA</color>
+    <color name="colorSurface">#F5F5F5</color>
+
+    <color name="colorTextDirection">#212121</color>
+    <color name="colorTextSetting">#212121</color>
+    <color name="colorTextDate">#212121</color>
+
+    <color name="colorToolbarBackground">@color/colorPrimary</color>
+    <color name="colorToolbarContent">#FFFFFF</color>
+    <color name="colorPopupOverlayBackground">#FFFFFF</color>
+    <color name="colorPopupOverlayContent">#212121</color>
+
+    <color name="colorStatusBar">@color/colorPrimaryDark</color>
+
+    <color name="colorBackgroundNavHeader">@color/colorPrimary</color>
+    <color name="colorTextNavHeader">@color/colorWhite</color>
+
+    <color name="colorBackgroundNavigationView">@color/colorBackground</color>
 
 </resources>

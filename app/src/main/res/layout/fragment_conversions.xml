@@ -21,14 +21,14 @@
         android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:background="@color/colorGray3"
+        android:background="@color/colorBackground"
         tools:context=".ui.fragments.ConversionsFragment">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcvDirection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/colorGray4"
+            app:cardBackgroundColor="@color/colorSurface"
             app:cardElevation="2dp"
             app:layout_constraintBottom_toTopOf="@+id/rvConversions"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clDir"
-                style="@style/RippleLightStyle"
+                style="@style/RippleStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +73,7 @@
                     android:singleLine="true"
                     android:text="@string/text_russian"
                     android:textAlignment="center"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorTextDirection"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/ivChange"
@@ -94,7 +94,7 @@
                     android:singleLine="true"
                     android:text="@string/text_english"
                     android:textAlignment="center"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorTextDirection"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +110,7 @@
             android:id="@+id/rvConversions"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/colorGray3"
+            android:background="@color/colorBackground"
             android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"
             app:layoutManager="LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/mcvInput"
@@ -125,7 +125,7 @@
             android:id="@+id/mcvInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/colorGray4"
+            app:cardBackgroundColor="@color/colorSurface"
             app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +172,7 @@
 
                     <ImageView
                         android:id="@+id/ivInfoModifiers"
-                        style="@style/RippleLightStyle"
+                        style="@style/RippleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -207,7 +207,7 @@
 
                     <ImageView
                         android:id="@+id/ivSend"
-                        style="@style/RippleLightStyle"
+                        style="@style/RippleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|bottom"

@@ -23,6 +23,7 @@ import com.google.android.material.navigation.NavigationView;
 import ru.f13.getlayout.GLApp;
 import ru.f13.getlayout.R;
 import ru.f13.getlayout.util.GLUtils;
+import ru.f13.getlayout.util.ThemeHelper;
 import ru.f13.getlayout.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

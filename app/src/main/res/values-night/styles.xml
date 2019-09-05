@@ -1,0 +1,10 @@
+<resources>
+
+    <style name="RippleStyle">
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?selectableItemBackgroundBorderless</item>
+    </style>
+
+</resources>

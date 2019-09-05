@@ -21,11 +21,13 @@ import android.app.Application;
 import ru.f13.getlayout.data.DataRepository;
 import ru.f13.getlayout.data.db.AppDatabase;
 import ru.f13.getlayout.data.prefs.AppPreferences;
+import ru.f13.getlayout.util.ThemeHelper;
 
 public class GLApp extends Application {
 
     @Override
     public void onCreate() {
+        ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
         super.onCreate();
     }
 

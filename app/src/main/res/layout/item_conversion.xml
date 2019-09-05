@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/colorWhite"
+        android:background="@color/colorSurface"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="4dp"
@@ -40,7 +40,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{conversion.dateText}"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorTextDate"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +51,7 @@
                     tools:text="15 августа 2019" />
 
                 <ImageView
-                    style="@style/RippleLightStyle"
+                    style="@style/RippleStyle"
                     android:id="@+id/ivShare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                     app:srcCompat="@drawable/ic_share" />
 
                 <ImageView
-                    style="@style/RippleLightStyle"
+                    style="@style/RippleStyle"
                     android:id="@+id/ivCopy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
 
                 <ImageView
                     android:id="@+id/ivDelete"
-                    style="@style/RippleLightStyle"
+                    style="@style/RippleStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -96,7 +96,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@{conversion.inputText}"
-                android:textColor="@color/colorGray2"
+                android:textColor="@color/colorContent"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toTopOf="@+id/tvResultText"
@@ -114,7 +114,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="@{conversion.resultText}"
-                android:textColor="@color/colorGray2"
+                android:textColor="@color/colorContent"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -13,11 +14,39 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" >
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    </style>
 
-    <style name="RippleLightStyle">
+    <style name="ToolbarStyle">
+        <item name="popupTheme">@style/ToolbarPopupTheme</item>
+        <item name="theme">@style/ToolbarTheme</item>
+
+        <item name="android:background">@color/colorToolbarBackground</item>
+        <item name="android:textColor">@color/colorToolbarContent</item>
+
+    </style>
+
+    <style name="ToolbarPopupTheme">
+        <item name="android:background">@color/colorPopupOverlayBackground</item>
+        <item name="android:textColor">@color/colorPopupOverlayContent</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:tint">@color/colorToolbarContent</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/colorToolbarContent</item>
+    </style>
+
+<!--    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >-->
+<!--        <item name="android:background">@color/colorWhite</item>-->
+<!--        <item name="android:tint">@color/colorBlack</item>-->
+<!--    </style>-->
+
+    <style name="RippleStyle">
         <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Light</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
