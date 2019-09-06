@@ -27,8 +27,9 @@ public class GLApp extends Application {
 
     @Override
     public void onCreate() {
-        ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
         super.onCreate();
+
+        ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
     }
 
     /**

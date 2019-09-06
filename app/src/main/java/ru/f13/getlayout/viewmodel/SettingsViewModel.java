@@ -55,4 +55,20 @@ public class SettingsViewModel extends AndroidViewModel {
         mRepository.setNotExitAlert(value);
     }
 
+    /**
+     * Получить значение настройки "использовать темную тему" с уведомлением о получении
+     * @return объект {@link LiveData}
+     */
+    public LiveData<Boolean> getDarkTheme() {
+        return mRepository.getDarkTheme();
+    }
+
+    /**
+     * Установить значение настройки "использовать темную тему"
+     * @param value true - не уведомлять о выходе, false - уведомлять о выходе
+     */
+    public void setDarkTheme(boolean value) {
+        mRepository.setDarkTheme(value);
+    }
+
 }

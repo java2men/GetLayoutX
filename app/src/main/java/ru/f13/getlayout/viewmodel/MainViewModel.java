@@ -38,4 +38,20 @@ public class MainViewModel extends AndroidViewModel {
         return mRepository.getNotExitAlert();
     }
 
+    /**
+     * Получить значене настройки "использовать темную тему" с уведомлением о получении
+     * @return объект {@link LiveData}
+     */
+    public LiveData<Boolean> getDarkTheme() {
+        return mRepository.getDarkTheme();
+    }
+
+    /**
+     * Получить значене настройки "использовать темную тему"
+     * @return true - используется темная тема, false - не используется темная тема
+     */
+    public boolean getDarkThemeValue() {
+        return mRepository.getDarkThemeValue();
+    }
+
 }

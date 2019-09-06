@@ -265,8 +265,8 @@ public class ConversionsFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
 
         if (isSaveData) {
             mViewModel.setConversionOptions(new ConversionOptions(
@@ -278,7 +278,6 @@ public class ConversionsFragment extends Fragment {
             mViewModel.deleteAllConversions();
             mViewModel.deleteConversionOptions();
         }
-
     }
 
     /**
@@ -292,8 +291,14 @@ public class ConversionsFragment extends Fragment {
             public void onChanged(@Nullable List<ConversionEntity> conversions) {
                 if (conversions != null) {
                     mBinding.setIsLoading(false);
+
                     mConversionsAdapter.setConversions(conversions);
 
+                    if (mConversionsAdapter.isEmpty()) {
+                        showStubEmptyConversion();
+                    } else {
+                        hideStubEmptyConversion();
+                    }
 
                     mBinding.rvConversions.postDelayed(new Runnable() {
                         @Override
@@ -407,6 +412,22 @@ public class ConversionsFragment extends Fragment {
         }
 
         mBinding.executePendingBindings();
+    }
+
+    /**
+     * Показать заглушку "нет конвертаций"
+     */
+    private void showStubEmptyConversion() {
+        mBinding.rvConversions.setVisibility(View.GONE);
+        mBinding.clEmptyData.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Скрыть заглушку "нет конвертаций"
+     */
+    private void hideStubEmptyConversion() {
+        mBinding.clEmptyData.setVisibility(View.GONE);
+        mBinding.rvConversions.setVisibility(View.VISIBLE);
     }
 
 }

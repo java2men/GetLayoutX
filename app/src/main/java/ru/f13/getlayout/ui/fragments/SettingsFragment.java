@@ -54,6 +54,13 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        mBinding.cbDarkTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.setDarkTheme(((CheckBox)v).isChecked());
+            }
+        });
+
         subscribeUi(viewModel);
     }
 
@@ -75,6 +82,14 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onChanged(Boolean value) {
                 mBinding.setIsNotExitAlert(value);
+                mBinding.executePendingBindings();
+            }
+        });
+
+        viewModel.getDarkTheme().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                mBinding.setIsDarkTheme(value);
                 mBinding.executePendingBindings();
             }
         });

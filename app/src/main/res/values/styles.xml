@@ -15,7 +15,7 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" >
-
+        <item name="android:elevation">@dimen/appbar_elevation</item>
     </style>
 
     <style name="ToolbarStyle">
@@ -39,6 +39,10 @@
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/colorToolbarContent</item>
+    </style>
+
+    <style name="DirectionStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">4dp</item>
     </style>
 
 <!--    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >-->

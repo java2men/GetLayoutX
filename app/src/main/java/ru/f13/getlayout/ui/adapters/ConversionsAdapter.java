@@ -178,6 +178,10 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
         return mConversions.get(position).getId();
     }
 
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
     /**
      * Холдер item конвертации
      */

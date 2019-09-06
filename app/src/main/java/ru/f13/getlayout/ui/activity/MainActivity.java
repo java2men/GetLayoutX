@@ -43,27 +43,28 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         subscribeUi(mMainViewModel);
 
+        if (mMainViewModel.getDarkThemeValue()) {
+            ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
+        } else {
+            ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
+        }
+
+        setContentView(R.layout.activity_main);
+
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
-        ((GLApp)getApplication()).getPreferences().getNotExitAlert().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean value) {
-                isNotExitAlert = value;
-            }
-        });
-
+        
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_conversions);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -182,13 +183,27 @@ public class MainActivity extends AppCompatActivity
      */
     private void subscribeUi(MainViewModel viewModel) {
 
-        // Update the list when the data changes
         viewModel.getNotExitAlert().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 isNotExitAlert = value;
             }
         });
+
+//        isDarkTheme = viewModel.getDarkTheme().getValue() != null;
+
+//        viewModel.getDarkTheme().observe(this, new Observer<Boolean>() {
+//            @Override
+//            public void onChanged(Boolean value) {
+//                isDarkTheme = value;
+//
+//                if (isDarkTheme) {
+//                    ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
+//                } else {
+//                    ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
+//                }
+//            }
+//        });
 
     }
 

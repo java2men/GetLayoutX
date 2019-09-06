@@ -19,6 +19,7 @@ public class AppPreferences {
     public static String PREF_KEY_SAVE_DATA = "pref_key_save_data";
     public static String PREF_KEY_NOT_KEYBOARD_START = "pref_key_not_keyboard_start";
     public static String PREF_KEY_EXIT_ALERT = "pref_key_exit_alert";
+    public static String PREF_KEY_DARK_THEME = "pref_key_dark_theme";
     public static String PREF_KEY_FONT_SIZE = "pref_key_font_size";
     public static String PREF_KEY_THEME = "pref_key_theme";
     public static String PREF_KEY_ABOUT = "pref_key_about";
@@ -133,6 +134,46 @@ public class AppPreferences {
         editor.remove(PREF_KEY_EXIT_ALERT);
         editor.commit();
     }
+
+
+
+
+    /**
+     * Получить настройку "использовать темную тему"
+     * @return объект {@link SharedPreferenceBooleanLiveData}
+     */
+    public SharedPreferenceBooleanLiveData getDarkTheme() {
+        return new SharedPreferenceBooleanLiveData(sharedPreferences, PREF_KEY_DARK_THEME, true);
+    }
+
+    /**
+     * Получить значение настройки "использовать темную тему"
+     * @return true - используется темная тема, false - не используется темная тема
+     */
+    public boolean getDarkThemeValue() {
+        return sharedPreferences.getBoolean(PREF_KEY_DARK_THEME, true);
+    }
+
+    /**
+     * Установить настройку "использовать темную тему"
+     * @param value true - не уведомлять, false - уведомлять
+     */
+    public void setDarkTheme(boolean value) {
+        editor.putBoolean(PREF_KEY_DARK_THEME, value);
+        editor.commit();
+    }
+
+    /**
+     * Удалить настройку "использовать темную тему"
+     */
+    public void deleteDarkTheme(){
+        editor.remove(PREF_KEY_DARK_THEME);
+        editor.commit();
+    }
+
+
+
+
 
     /**
      * Получить из настроек параметры конвертации
