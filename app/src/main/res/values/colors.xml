@@ -29,4 +29,7 @@
 
     <color name="colorBackgroundNavigationView">@color/colorBackground</color>
 
+    <color name="colorTextInput">#FF7058</color>
+    <color name="colorTextResult">@color/colorContent</color>
+
 </resources>
