@@ -20,6 +20,7 @@
     <color name="colorPopupOverlayContent">#FFFFFF</color>
 
     <color name="colorStatusBar">#121212</color>
+    <color name="colorNavigationBar">@color/colorBlack</color>
 
     <color name="colorBackgroundNavHeader">#2C2C2C</color>
     <color name="colorTextNavHeader">@color/colorWhite</color>

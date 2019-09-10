@@ -8,18 +8,28 @@
     <fragment
         android:id="@+id/conversionsFragment"
         android:name="ru.f13.getlayout.ui.fragments.ConversionsFragment"
-        android:label="conversions_fragment"
+        android:label="@string/conversions"
         tools:layout="@layout/fragment_conversions">
         <!--        <action-->
         <!--            android:id="@+id/action_listFragment_to_detailFragment"-->
         <!--            app:popUpToInclusive="true"-->
         <!--            app:destination="@id/detailFragment" />-->
+        <action
+            android:id="@+id/action_conversionsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/conversionsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_conversionsFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            app:popUpTo="@id/conversionsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="ru.f13.getlayout.ui.fragments.SettingsFragment"
-        android:label="settings_fragment"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings" >
         <!--<action-->
             <!--android:id="@+id/action_listFragment_to_detailFragment"-->
@@ -29,29 +39,29 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="ru.f13.getlayout.ui.fragments.AboutFragment"
-        android:label="about_fragment"
+        android:label="@string/about"
         tools:layout="@layout/fragment_about" >
         <!--<action-->
         <!--android:id="@+id/action_listFragment_to_detailFragment"-->
         <!--app:destination="@id/detailFragment" />-->
     </fragment>
 
-    <action
-        android:id="@+id/action_global_conversionsFragment"
-        app:destination="@id/conversionsFragment"
-        app:popUpTo="@+id/conversionsFragment"
-        app:popUpToInclusive="true" />
+<!--    <action-->
+<!--        android:id="@+id/action_global_conversionsFragment"-->
+<!--        app:destination="@id/conversionsFragment"-->
+<!--        app:popUpTo="@+id/conversionsFragment"-->
+<!--        app:popUpToInclusive="false" />-->
 
-    <action
-        android:id="@+id/action_global_settingsFragment"
-        app:destination="@id/settingsFragment"
-        app:popUpTo="@+id/settingsFragment"
-        app:popUpToInclusive="true" />
+<!--    <action-->
+<!--        android:id="@+id/action_global_settingsFragment"-->
+<!--        app:destination="@id/settingsFragment"-->
+<!--        app:popUpTo="@+id/settingsFragment"-->
+<!--        app:popUpToInclusive="false" />-->
 
-    <action
-        android:id="@+id/action_global_aboutFragment"
-        app:destination="@id/aboutFragment"
-        app:popUpTo="@+id/aboutFragment"
-        app:popUpToInclusive="true" />
+<!--    <action-->
+<!--        android:id="@+id/action_global_aboutFragment"-->
+<!--        app:destination="@id/aboutFragment"-->
+<!--        app:popUpTo="@+id/aboutFragment"-->
+<!--        app:popUpToInclusive="false" />-->
 
 </navigation>

@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import ru.f13.getlayout.R;
 
 /**
  * Класс утилита
@@ -151,6 +156,33 @@ public class GLUtils {
 
         DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
         return px / (metrics.densityDpi / 160f);
+    }
+
+    /**
+     * Создать кастомный {@link Toast}
+     * @param resIdText id ресурса текста
+     * @param duration продолжительность
+     * @param gravity позиция
+     * @param xOffsetPx смещение в пикселях по X
+     * @param yOffsetPx смещение в пикселях по Y
+     * @return {@link Toast}
+     */
+    public Toast createToastCustom(int resIdText, int duration, int gravity, int xOffsetPx, int yOffsetPx) {
+
+        Toast toast = new Toast(mContext);
+        toast.setGravity(gravity, xOffsetPx, yOffsetPx);
+        toast.setDuration(duration);
+
+        View layout =  LayoutInflater.from(mContext)
+                .inflate(R.layout.layout_custom_toast, null, false);
+
+        TextView tv = layout.findViewById(R.id.tvText);
+        tv.setText(resIdText);
+
+        toast.setView(layout);
+
+        return toast;
+
     }
 
 }

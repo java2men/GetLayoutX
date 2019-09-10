@@ -8,8 +8,10 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +35,15 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
 import ru.f13.getlayout.R;
-import ru.f13.getlayout.databinding.FragmentConversionsBinding;
 import ru.f13.getlayout.data.db.entity.ConversionEntity;
 import ru.f13.getlayout.data.model.ConversionOptions;
+import ru.f13.getlayout.databinding.FragmentConversionsBinding;
+import ru.f13.getlayout.ui.activity.MainActivity;
 import ru.f13.getlayout.ui.adapters.ConversionsAdapter;
+import ru.f13.getlayout.ui.adapters.OnCopyResultListener;
 import ru.f13.getlayout.ui.adapters.OnDeleteConversionListener;
-import ru.f13.getlayout.util.InputFilterAllLower;
 import ru.f13.getlayout.util.GLUtils;
+import ru.f13.getlayout.util.InputFilterAllLower;
 import ru.f13.getlayout.util.convert.ConvertLayout;
 import ru.f13.getlayout.viewmodel.ConversionsViewModel;
 
@@ -74,6 +78,8 @@ public class ConversionsFragment extends Fragment {
 
     private GLUtils glUtils;
 
+    private MenuItem miDeleteAll;
+
     /**
      * Новый инстанс
      * @return фрагмент {@link ConversionsFragment}
@@ -85,6 +91,8 @@ public class ConversionsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
         glUtils = GLUtils.getInstance(getContext());
     }
 
@@ -125,6 +133,15 @@ public class ConversionsFragment extends Fragment {
 
         mConversionsAdapter = new ConversionsAdapter(mBinding.rvConversions.getContext());
         mBinding.rvConversions.setAdapter(mConversionsAdapter);
+
+        mConversionsAdapter.setOnCopyResultListener(new OnCopyResultListener() {
+            @Override
+            public void onCopy() {
+                ((MainActivity)requireActivity()).
+                        showCustomToast(R.string.notification_copy_result, Toast.LENGTH_SHORT);
+            }
+        });
+
         mConversionsAdapter.setOnDeleteConversionListener(new OnDeleteConversionListener() {
             @Override
             public void onDelete(final int id, String dateText) {
@@ -137,6 +154,7 @@ public class ConversionsFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 mViewModel.deleteConversion(id);
+                                updateStateDeleteAll();
                             }
                         });
 
@@ -172,14 +190,8 @@ public class ConversionsFragment extends Fragment {
         mBinding.ivInfoModifiers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = mBinding.ivInfoModifiers.getContext();
-                Toast toast =
-                        Toast.makeText(context, R.string.info_modifiers, Toast.LENGTH_LONG);
-                int offsetX = 0;
-                int offsetY = (int) GLUtils.getInstance(context).dpToPx(16);
-                toast.setGravity(Gravity.BOTTOM, offsetX, offsetY);
-
-                toast.show();
+                ((MainActivity)requireActivity()).
+                        showCustomToast(R.string.info_modifiers, Toast.LENGTH_LONG);
             }
         });
 
@@ -253,8 +265,6 @@ public class ConversionsFragment extends Fragment {
 
     }
 
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -280,6 +290,46 @@ public class ConversionsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.main, menu);
+        miDeleteAll = menu.findItem(R.id.action_delete_all);
+
+        updateStateDeleteAll();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete_all) {
+
+            glUtils.hideKeyboard(getView());
+
+            Context context = mBinding.rvConversions.getContext();
+            Snackbar snackbar = Snackbar.
+                    make(mBinding.getRoot(), getString(R.string.delete_history), Snackbar.LENGTH_LONG).
+                    setActionTextColor(ContextCompat.getColorStateList(context, R.color.colorWhite)).
+                    setAction(R.string.yes, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mViewModel.deleteAllConversions();
+                            updateStateDeleteAll();
+                        }
+                    });
+
+            snackbar.show();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Подписаться UI на изменения
      * @param viewModel объект {@link androidx.lifecycle.ViewModel}
@@ -299,6 +349,8 @@ public class ConversionsFragment extends Fragment {
                     } else {
                         hideStubEmptyConversion();
                     }
+
+                    updateStateDeleteAll();
 
                     mBinding.rvConversions.postDelayed(new Runnable() {
                         @Override
@@ -430,4 +482,13 @@ public class ConversionsFragment extends Fragment {
         mBinding.rvConversions.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Обновить состояние(скрыть или отобразить) кнопки удаления истории
+     */
+    private void updateStateDeleteAll() {
+        if (miDeleteAll == null || mConversionsAdapter == null) {return;}
+
+        miDeleteAll.setVisible(!mConversionsAdapter.isEmpty());
+
+    }
 }

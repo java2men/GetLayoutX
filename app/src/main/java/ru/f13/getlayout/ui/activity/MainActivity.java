@@ -1,15 +1,20 @@
 package ru.f13.getlayout.ui.activity;
 
+import android.app.ActivityManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
@@ -17,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,8 +32,7 @@ import ru.f13.getlayout.util.GLUtils;
 import ru.f13.getlayout.util.ThemeHelper;
 import ru.f13.getlayout.viewmodel.MainViewModel;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * Период для выхода
@@ -40,14 +45,12 @@ public class MainActivity extends AppCompatActivity
     private boolean isNotExitAlert = false;
     private long timeLastPressExit = 0 - PERIOD_FOR_EXIT;
 
+    private GLUtils glUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        subscribeUi(mMainViewModel);
 
         if (mMainViewModel.getDarkThemeValue()) {
             ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
@@ -55,7 +58,13 @@ public class MainActivity extends AppCompatActivity
             ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
         }
 
+        super.onCreate(savedInstanceState);
+
+        subscribeUi(mMainViewModel);
+
         setContentView(R.layout.activity_main);
+
+        glUtils = GLUtils.getInstance(getBaseContext());
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         
@@ -63,8 +72,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_conversions);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -95,6 +104,21 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //определять цвет для Recent Apps
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setTaskDescription(new ActivityManager.
+                    TaskDescription(null, null,
+                    ContextCompat.getColor(getBaseContext(), R.color.colorPrimary))
+            );
+        }
     }
 
     @Override
@@ -104,11 +128,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-//            super.onBackPressed();
-//            System.out.println("navController.popBackStack() = " + navController.popBackStack());
-//
+
             NavDestination current = navController.getCurrentDestination();
-            //если текущий узел, это фрагмент конвертации, то это - точка выхода
             boolean isExit = current != null && current.getId() == R.id.conversionsFragment;
 
             if (isExit) {
@@ -117,12 +138,16 @@ public class MainActivity extends AppCompatActivity
                     if (timeLastPressExit + PERIOD_FOR_EXIT >= System.currentTimeMillis()) {
                         super.onBackPressed();
                     } else {
-                        Toast.makeText(getBaseContext(), getString(R.string.click_exit_application), Toast.LENGTH_SHORT).show();
+
+                        showCustomToast(R.string.click_exit_application, Toast.LENGTH_SHORT);
+
                         timeLastPressExit = System.currentTimeMillis();
                     }
                 } else {
                     super.onBackPressed();
                 }
+            } else {
+                navController.popBackStack();
             }
 
         }
@@ -137,7 +162,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu);
+//        getMenuInflater().inflate(R.menu.main, menu);
+
         return false;
     }
 
@@ -146,12 +173,6 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -160,17 +181,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_conversions) {
-            navigateConversionsFragment();
-        } else if (id == R.id.nav_delete_histoty) {
-            mMainViewModel.deleteAllConversions();
-        } else if (id == R.id.nav_settings) {
-            navigateSettingsFragment();
-        } else if (id == R.id.nav_about) {
-            navigateAboutFragment();
-        }
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_conversions) {
+//            navigateConversionsFragment();
+//        } else if (id == R.id.nav_delete_histoty) {
+//            mMainViewModel.deleteAllConversions();
+//        } else if (id == R.id.nav_settings) {
+//            navigateSettingsFragment();
+//        } else if (id == R.id.nav_about) {
+//            navigateAboutFragment();
+//        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -190,42 +211,40 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-//        isDarkTheme = viewModel.getDarkTheme().getValue() != null;
+    }
 
-//        viewModel.getDarkTheme().observe(this, new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(Boolean value) {
-//                isDarkTheme = value;
+//    /**
+//     * Направить к фрагменту конверций
+//     */
+//    public void navigateConversionsFragment() {
+//        navController.navigate(R.id.action_global_conversionsFragment);
+//    }
 //
-//                if (isDarkTheme) {
-//                    ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
-//                } else {
-//                    ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
-//                }
-//            }
-//        });
-
-    }
-
-    /**
-     * Направить к фрагменту конверций
-     */
-    public void navigateConversionsFragment() {
-        navController.navigate(R.id.action_global_conversionsFragment);
-    }
+//    /**
+//     * Направить к фрагменту настроек
+//     */
+//    public void navigateSettingsFragment() {
+//        navController.navigate(R.id.action_global_settingsFragment);
+//    }
+//
+//    /**
+//     * Направить к фрагменту "о приложении"
+//     */
+//    public void navigateAboutFragment() {
+//        navController.navigate(R.id.action_global_aboutFragment);
+//    }
 
     /**
-     * Направить к фрагменту настроек
+     * Показать кастомный toast
+     * @param resIdText id ресурса текста
+     * @param duration длительность
      */
-    public void navigateSettingsFragment() {
-        navController.navigate(R.id.action_global_settingsFragment);
-    }
-
-    /**
-     * Направить к фрагменту "о приложении"
-     */
-    public void navigateAboutFragment() {
-        navController.navigate(R.id.action_global_aboutFragment);
+    public void showCustomToast(int resIdText, int duration) {
+        int offsetX = 0;
+        int offsetY = (int) glUtils.dpToPx(64);
+        Toast toast = glUtils.
+                createToastCustom(resIdText, duration, Gravity.BOTTOM, offsetX, offsetY);
+        toast.show();
     }
 
 }

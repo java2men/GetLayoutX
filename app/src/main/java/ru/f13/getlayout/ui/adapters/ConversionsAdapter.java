@@ -20,11 +20,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -36,8 +34,8 @@ import java.util.Objects;
 
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration;
 import ru.f13.getlayout.R;
-import ru.f13.getlayout.databinding.ItemConversionBinding;
 import ru.f13.getlayout.data.model.Conversion;
+import ru.f13.getlayout.databinding.ItemConversionBinding;
 import ru.f13.getlayout.util.GLUtils;
 
 /**
@@ -54,7 +52,9 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
     private RecyclerView mRecyclerView;
 
     private ClipboardManager clipboard;
+    private GLUtils glUtils;
 
+    private OnCopyResultListener mOnCopyResultListener;
     private OnDeleteConversionListener mOnDeleteConversionListener;
 
     /**
@@ -65,6 +65,7 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
 
         setHasStableIds(true);
         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        glUtils = GLUtils.getInstance(context);
     }
 
     /**
@@ -200,7 +201,7 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
                         String text = binding.getConversion().getResultText();
                         Context context = binding.getRoot().getContext();
                         GLUtils.getInstance(context).hideKeyboard(binding.ivCopy);
-                        copyTextAndNotify(context, text);
+                        copyTextAndNotify(text);
                     }
                 }
             });
@@ -220,10 +221,16 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
             this.binding.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if (mOnDeleteConversionListener == null) {
+                        return;
+                    }
+
                     int id = binding.getConversion().getId();
                     String dateText = binding.getConversion().getDateText();
                     Context context = binding.getRoot().getContext();
                     GLUtils.getInstance(context).hideKeyboard(binding.getRoot());
+
                     mOnDeleteConversionListener.onDelete(id, dateText);
                 }
             });
@@ -232,18 +239,17 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
     }
 
     /**
-     * Копировать текст и уведомить через Toast
-     * @param context контекст
-     * @param text текст
+     * Копировать текст и уведомить через {@link OnCopyResultListener}
+     * @param text текст для копирования
      */
-    private void copyTextAndNotify(Context context, String text) {
-            ClipData clip = ClipData.newPlainText("get-layout-result-conversion", text);
-            clipboard.setPrimaryClip(clip);
-            Toast toast = Toast.makeText(context, R.string.notification_copy_result, Toast.LENGTH_SHORT);
-            int offsetX = 0;
-            int offsetY = (int) GLUtils.getInstance(context).dpToPx(16);
-            toast.setGravity(Gravity.BOTTOM, offsetX, offsetY);
-            toast.show();
+    private void copyTextAndNotify(String text) {
+        ClipData clip = ClipData.newPlainText("get-layout-result-conversion", text);
+        clipboard.setPrimaryClip(clip);
+
+        if (mOnCopyResultListener != null) {
+            mOnCopyResultListener.onCopy();
+        }
+
     }
 
     /**
@@ -258,6 +264,30 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
         sendIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(sendIntent, context.getResources().getText(R.string.send_to)));
 
+    }
+
+    /**
+     * Получить слушатель копирования результата
+     * @return слушатель копирования результата
+     */
+    public OnCopyResultListener getOnCopyResultListener() {
+        return mOnCopyResultListener;
+    }
+
+    /**
+     * Установить слушатель копирования результата
+     * @param onCopyResultListener слущатель копирования результата
+     */
+    public void setOnCopyResultListener(OnCopyResultListener onCopyResultListener) {
+        mOnCopyResultListener = onCopyResultListener;
+    }
+
+    /**
+     * Получить слушатель удаления конвертации из базы данных
+     * @return слушатель удаления конвертации из базы данных
+     */
+    public OnDeleteConversionListener getOnDeleteConversionListener() {
+        return mOnDeleteConversionListener;
     }
 
     /**

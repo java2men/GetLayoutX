@@ -3,27 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="none">
+    <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_conversions"
-            android:checkable="true"
+            android:id="@+id/conversionsFragment"
             android:icon="@drawable/ic_compare_arrows"
-            android:title="@string/menu_conversions" />
+            android:title="@string/conversions" />
         <item
-            android:id="@+id/nav_delete_histoty"
-            android:icon="@drawable/ic_delete"
-            android:title="@string/menu_delete_history" />
-        <item
-            android:id="@+id/nav_settings"
-            android:checkable="true"
+            android:id="@+id/settingsFragment"
             android:icon="@drawable/ic_settings"
-            android:title="@string/menu_settings" />
+            android:title="@string/settings" />
 
         <item
-            android:id="@+id/nav_about"
-            android:checkable="true"
+            android:id="@+id/aboutFragment"
             android:icon="@drawable/ic_info"
-            android:title="@string/menu_about" />
+            android:title="@string/about" />
     </group>
 
 
