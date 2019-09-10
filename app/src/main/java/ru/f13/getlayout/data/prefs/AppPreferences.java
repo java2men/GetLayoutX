@@ -135,15 +135,12 @@ public class AppPreferences {
         editor.commit();
     }
 
-
-
-
     /**
      * Получить настройку "использовать темную тему"
      * @return объект {@link SharedPreferenceBooleanLiveData}
      */
     public SharedPreferenceBooleanLiveData getDarkTheme() {
-        return new SharedPreferenceBooleanLiveData(sharedPreferences, PREF_KEY_DARK_THEME, true);
+        return new SharedPreferenceBooleanLiveData(sharedPreferences, PREF_KEY_DARK_THEME, false);
     }
 
     /**
@@ -151,7 +148,7 @@ public class AppPreferences {
      * @return true - используется темная тема, false - не используется темная тема
      */
     public boolean getDarkThemeValue() {
-        return sharedPreferences.getBoolean(PREF_KEY_DARK_THEME, true);
+        return sharedPreferences.getBoolean(PREF_KEY_DARK_THEME, false);
     }
 
     /**
