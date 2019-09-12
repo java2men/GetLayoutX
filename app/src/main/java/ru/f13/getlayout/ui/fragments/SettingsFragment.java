@@ -2,17 +2,16 @@ package ru.f13.getlayout.ui.fragments;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
 
 import ru.f13.getlayout.R;
 import ru.f13.getlayout.databinding.FragmentSettingsBinding;
@@ -38,7 +37,31 @@ public class SettingsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        requireActivity().setTitle(R.string.settings);
+
         final SettingsViewModel viewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+
+        mBinding.clSaveData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.cbSaveData.performClick();
+            }
+        });
+
+        mBinding.clExitAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.cbNotExitAlert.performClick();
+            }
+        });
+
+        mBinding.clDarkTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.cbDarkTheme.performClick();
+            }
+        });
+
 
         mBinding.cbSaveData.setOnClickListener(new View.OnClickListener() {
             @Override

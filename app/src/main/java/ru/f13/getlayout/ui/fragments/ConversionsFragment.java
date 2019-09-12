@@ -285,6 +285,8 @@ public class ConversionsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        requireActivity().setTitle(R.string.get_layout);
+
         mViewModel = ViewModelProviders.of(this).get(ConversionsViewModel.class);
         subscribeUi(mViewModel);
 

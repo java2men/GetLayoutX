@@ -59,4 +59,11 @@ public class AboutFragment extends Fragment {
         mBinding.setAboutText(spanned);
 
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        requireActivity().setTitle(R.string.about);
+    }
 }
