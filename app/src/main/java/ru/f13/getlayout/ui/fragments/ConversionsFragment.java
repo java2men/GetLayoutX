@@ -32,6 +32,9 @@ import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import ru.f13.getlayout.R;
@@ -45,6 +48,7 @@ import ru.f13.getlayout.ui.adapters.OnDeleteConversionListener;
 import ru.f13.getlayout.util.GLUtils;
 import ru.f13.getlayout.util.InputFilterAllLower;
 import ru.f13.getlayout.util.convert.ConvertLayout;
+import ru.f13.getlayout.util.convert.ConvertSequence;
 import ru.f13.getlayout.viewmodel.ConversionsViewModel;
 
 public class ConversionsFragment extends Fragment {
@@ -216,34 +220,62 @@ public class ConversionsFragment extends Fragment {
         mBinding.cbShift.setOnCheckedChangeListener(onCheckedChangeListener);
         mBinding.cbCapsLock.setOnCheckedChangeListener(onCheckedChangeListener);
 
+        final LinkedList<ConvertSequence> alInputText = new LinkedList<>();
         mBinding.tietInput.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                System.out.println("------------beforeTextChanged s = " + s + " start = " + start + " count = " + count + " after = " + after);
                 beforeInputText = s.toString();
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                System.out.println("onTextChanged s = " + s + " start = " + start + " count = " + count + " before = " + before);
 
+                if (s.length() == 0) return;
+
+                boolean isReplace = before > 0;
+                int end = start + count;
+//                int end = 0;
+//                if (isReplace) {
+//                    end = start + before;
+//                } else {
+//                    end = start + count;
+//                }
+                String changed = s.subSequence(start, end).toString();
+                boolean isShift = mBinding.cbShift.isChecked();
+                boolean isCaps = mBinding.cbCapsLock.isChecked();
+                ConvertSequence convertSequence = new ConvertSequence(changed, isShift, isCaps);
+
+                if (isReplace) {
+//                    alInputText.delete(start, start + before);
+                    alInputText.subList(start, start + before).clear();
+                }
+
+//                alInputText.insert(start, convertSequence);
+                alInputText.add(start, convertSequence);
+
+                System.out.println("onTextChanged sb.append = " + alInputText.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                System.out.println("afterTextChanged s = " + s);
 
-                afterInputText = s.toString();
+//                afterInputText = s.toString();
+//
+//                //конвертировать текст при изменении текста редактора
+//                convertLayout.
+//                        unionKeyboard(
+//                                convertLayout.getKeyboard(inputCode),
+//                                convertLayout.getKeyboard(resultCode),
+//                                mBinding.cbShift.isChecked(),
+//                                mBinding.cbCapsLock.isChecked()
+//                        );
+//
+//                lastResultText = convertLayout.getResultText(beforeInputText, afterInputText, lastResultText);
 
-                //конвертировать текст при изменении текста редактора
-                convertLayout.
-                        unionKeyboard(
-                                convertLayout.getKeyboard(inputCode),
-                                convertLayout.getKeyboard(resultCode),
-                                mBinding.cbShift.isChecked(),
-                                mBinding.cbCapsLock.isChecked()
-                        );
-
-                lastResultText = convertLayout.getResultText(beforeInputText, afterInputText, lastResultText);
             }
         });
 
@@ -255,8 +287,15 @@ public class ConversionsFragment extends Fragment {
                 //отправлять только непустые данные
                 if (editable != null && !TextUtils.isEmpty(editable.toString())) {
                     String inputText = editable.toString();
+
+                    convertLayout.unionKeyboard(
+                            convertLayout.getKeyboard(inputCode),
+                            convertLayout.getKeyboard(resultCode)
+                    );
+                    lastResultText = convertLayout.getResultText(alInputText);
                     mViewModel.addConversionText(inputText, lastResultText);
 
+                    alInputText.clear();
                     editable.clear();
 
                 }

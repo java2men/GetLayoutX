@@ -321,6 +321,45 @@ public class ConvertLayout {
 
     }
 
+    public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard) {
+
+        if (inputKeyboard == null || resultKeyboard == null) {
+            return;
+        }
+
+        if (inputKeyboard.getKeyMaps() == null || resultKeyboard.getKeyMaps() == null) {
+            return;
+        }
+
+        KeyMap inputKeyMap;
+        KeyMap resultKeyMap;
+        String[] modifiers = {MODIFIER_NONE, MODIFIER_SHIFT, MODIFIER_CAPS, MODIFIER_CAPS_SHIFT};
+        unionMaps = new ArrayList<>();
+
+        for (String modifier : modifiers) {
+
+            inputKeyMap = findKeyMap(inputKeyboard, modifier);
+            if (inputKeyMap == null) {
+                return;
+            }
+
+            resultKeyMap = findKeyMap(resultKeyboard, modifier);
+            if (resultKeyMap == null) {
+                return;
+            }
+
+            for (Map mapIKM : inputKeyMap.getMaps()) {
+                for (Map mapRKM : resultKeyMap.getMaps()) {
+                    if (mapIKM.getIso().equals(mapRKM.getIso())) {
+                        unionMaps.add(new UnionMap(modifier, mapIKM, mapRKM));
+                    }
+                }
+            }
+
+        }
+
+    }
+
     /**
      * Найти {@link KeyMap}
      * @param keyboard клавиатура
@@ -407,6 +446,21 @@ public class ConvertLayout {
         return sbResultText.toString();
     }
 
+    public String getResultText(List<ConvertSequence> inputText) {
+
+        StringBuilder sbResultText = new StringBuilder();
+        for (int i = 0; i < inputText.size(); i++) {
+            ConvertSequence looking = inputText.get(i);//что ищем
+            String found = findInUnionMap(looking);//найденное
+            if (found.equals("")) {
+                sbResultText.append(looking);
+            } else {
+                sbResultText.append(found);
+            }
+        }
+        return sbResultText.toString();
+    }
+
     /**
      * Найти символ в объеденной карте символов раскладок
      * @param find искомый символ
@@ -444,6 +498,24 @@ public class ConvertLayout {
                 //}
                 return resultTo;
             }
+        }
+
+        return "";
+    }
+
+    private String findInUnionMap(ConvertSequence find) {
+
+        for (UnionMap unionMap : unionMaps) {
+
+            String inputTo = unescapeJava(unionMap.getInputMap().getTo());
+            inputTo = unescapeHtml(inputTo);
+            if (unionMap.getModifier().equals(find.getModifier()) && inputTo.equals(find.getSequence())) {
+                String resultTo = unescapeJava(unionMap.getResultMap().getTo());
+                resultTo = unescapeHtml(resultTo);
+
+                return resultTo;
+            }
+
         }
 
         return "";
