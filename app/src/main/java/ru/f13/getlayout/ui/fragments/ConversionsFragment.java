@@ -32,8 +32,6 @@ import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,7 +46,8 @@ import ru.f13.getlayout.ui.adapters.OnDeleteConversionListener;
 import ru.f13.getlayout.util.GLUtils;
 import ru.f13.getlayout.util.InputFilterAllLower;
 import ru.f13.getlayout.util.convert.ConvertLayout;
-import ru.f13.getlayout.util.convert.ConvertSequence;
+import ru.f13.getlayout.util.convert.ModifierSequence;
+import ru.f13.getlayout.util.convert.ModifierSequenceBuilder;
 import ru.f13.getlayout.viewmodel.ConversionsViewModel;
 
 public class ConversionsFragment extends Fragment {
@@ -220,7 +219,7 @@ public class ConversionsFragment extends Fragment {
         mBinding.cbShift.setOnCheckedChangeListener(onCheckedChangeListener);
         mBinding.cbCapsLock.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        final LinkedList<ConvertSequence> alInputText = new LinkedList<>();
+        final ModifierSequenceBuilder msbInputText = new ModifierSequenceBuilder();
         mBinding.tietInput.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -246,17 +245,17 @@ public class ConversionsFragment extends Fragment {
                 String changed = s.subSequence(start, end).toString();
                 boolean isShift = mBinding.cbShift.isChecked();
                 boolean isCaps = mBinding.cbCapsLock.isChecked();
-                ConvertSequence convertSequence = new ConvertSequence(changed, isShift, isCaps);
+                ModifierSequence modSeq = new ModifierSequence(changed, isShift, isCaps);
 
                 if (isReplace) {
 //                    alInputText.delete(start, start + before);
-                    alInputText.subList(start, start + before).clear();
+                    msbInputText.remove(start, start + before);
                 }
 
 //                alInputText.insert(start, convertSequence);
-                alInputText.add(start, convertSequence);
+                msbInputText.add(start, modSeq);
 
-                System.out.println("onTextChanged sb.append = " + alInputText.toString());
+                System.out.println("onTextChanged sb.append = " + msbInputText.toString());
             }
 
             @Override
@@ -292,10 +291,10 @@ public class ConversionsFragment extends Fragment {
                             convertLayout.getKeyboard(inputCode),
                             convertLayout.getKeyboard(resultCode)
                     );
-                    lastResultText = convertLayout.getResultText(alInputText);
+                    lastResultText = convertLayout.getResultText(msbInputText);
                     mViewModel.addConversionText(inputText, lastResultText);
 
-                    alInputText.clear();
+                    msbInputText.clear();
                     editable.clear();
 
                 }

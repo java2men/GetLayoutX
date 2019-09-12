@@ -277,6 +277,7 @@ public class ConvertLayout {
      * @param shift true - задействовать модификатор shift, false - не задействовать модификатор shift
      * @param capsLock true - задействовать модификатор capsLock, false - не задействовать модификатор capsLock
      */
+    @Deprecated
     public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard, boolean shift, boolean capsLock) {
 
         if (inputKeyboard == null || resultKeyboard == null) {
@@ -321,6 +322,11 @@ public class ConvertLayout {
 
     }
 
+    /**
+     * Объеденить клавиатуры раскладок, которые будут участвовать в конвертации
+     * @param inputKeyboard объект исходной клавиатуры
+     * @param resultKeyboard объект результирующей клавиатуры
+     */
     public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard) {
 
         if (inputKeyboard == null || resultKeyboard == null) {
@@ -431,6 +437,7 @@ public class ConvertLayout {
      * @param inputText исходный текст
      * @return результирующий текст
      */
+    @Deprecated
     public String getResultText(String inputText) {
 
         StringBuilder sbResultText = new StringBuilder();
@@ -446,11 +453,16 @@ public class ConvertLayout {
         return sbResultText.toString();
     }
 
-    public String getResultText(List<ConvertSequence> inputText) {
+    /**
+     * Получить результирующий текст конвертации
+     * @param inputText исходный текст из списка последовательности {@link ModifierSequence}
+     * @return результирующий текст
+     */
+    public String getResultText(ModifierSequenceBuilder inputText) {
 
         StringBuilder sbResultText = new StringBuilder();
         for (int i = 0; i < inputText.size(); i++) {
-            ConvertSequence looking = inputText.get(i);//что ищем
+            ModifierSequence looking = inputText.get(i);//что ищем
             String found = findInUnionMap(looking);//найденное
             if (found.equals("")) {
                 sbResultText.append(looking);
@@ -466,6 +478,7 @@ public class ConvertLayout {
      * @param find искомый символ
      * @return найденный сконвертированный символ
      */
+    @Deprecated
     private String findInUnionMap(String find) {
 
         for (UnionMap unionMap : unionMaps) {
@@ -475,27 +488,7 @@ public class ConvertLayout {
             if (inputTo.equals(find)) {
                 String resultTo = unescapeJava(unionMap.getResultMap().getTo());
                 resultTo = unescapeHtml(resultTo);
-                //if (resultTo.indexOf("\\u") != -1) {
-                    /*
-                    try {
-                        byte[] utf8Bytes = to.getBytes("UTF8");
-                        to = new String(utf8Bytes,"UTF8");
-                    }
-                    catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
 
-
-                    try {
-                        JSONObject json = new JSONObject();
-                        json.put("string", to);
-                        String converted = json.getString("string");
-                        to = converted;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    */
-                //}
                 return resultTo;
             }
         }
@@ -503,7 +496,12 @@ public class ConvertLayout {
         return "";
     }
 
-    private String findInUnionMap(ConvertSequence find) {
+    /**
+     * Найти символ в объеденной карте символов раскладок
+     * @param find искомый символ последовательности {@link ModifierSequence}
+     * @return найденный сконвертированный символ
+     */
+    private String findInUnionMap(ModifierSequence find) {
 
         for (UnionMap unionMap : unionMaps) {
 
