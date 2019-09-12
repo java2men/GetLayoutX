@@ -22,6 +22,8 @@ import ru.f13.getlayout.util.convert.models.Names;
 import ru.f13.getlayout.util.convert.models.Settings;
 import ru.f13.getlayout.util.convert.models.UnionMap;
 import ru.f13.getlayout.util.convert.models.Version;
+import ru.f13.getlayout.util.convert.sequence.ModifierSequence;
+import ru.f13.getlayout.util.convert.sequence.ModifierSequenceBuilder;
 
 /**
  * Created by IALozhnikov on 08.09.2016.
@@ -274,58 +276,6 @@ public class ConvertLayout {
      * Объеденить клавиатуры раскладок, которые будут участвовать в конвертации
      * @param inputKeyboard объект исходной клавиатуры
      * @param resultKeyboard объект результирующей клавиатуры
-     * @param shift true - задействовать модификатор shift, false - не задействовать модификатор shift
-     * @param capsLock true - задействовать модификатор capsLock, false - не задействовать модификатор capsLock
-     */
-    @Deprecated
-    public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard, boolean shift, boolean capsLock) {
-
-        if (inputKeyboard == null || resultKeyboard == null) {
-            return;
-        }
-
-        if (inputKeyboard.getKeyMaps() == null || resultKeyboard.getKeyMaps() == null) {
-            return;
-        }
-
-        KeyMap inputKeyMap;
-        KeyMap resultKeyMap;
-        unionMaps = new ArrayList<>();
-
-        String modifier = MODIFIER_NONE;
-
-        if (shift && !capsLock) {
-            modifier = MODIFIER_SHIFT;
-        } else if (!shift && capsLock) {
-            modifier = MODIFIER_CAPS;
-        } else if (shift && capsLock) {
-            modifier = MODIFIER_CAPS_SHIFT;
-        }
-
-        inputKeyMap = findKeyMap(inputKeyboard, modifier);
-        if (inputKeyMap == null) {
-            return;
-        }
-
-        resultKeyMap = findKeyMap(resultKeyboard, modifier);
-        if (resultKeyMap == null) {
-            return;
-        }
-
-        for (Map mapIKM : inputKeyMap.getMaps()) {
-            for (Map mapRKM : resultKeyMap.getMaps()) {
-                if (mapIKM.getIso().equals(mapRKM.getIso())) {
-                    unionMaps.add(new UnionMap(mapIKM, mapRKM));
-                }
-            }
-        }
-
-    }
-
-    /**
-     * Объеденить клавиатуры раскладок, которые будут участвовать в конвертации
-     * @param inputKeyboard объект исходной клавиатуры
-     * @param resultKeyboard объект результирующей клавиатуры
      */
     public void unionKeyboard(Keyboard inputKeyboard, Keyboard resultKeyboard) {
 
@@ -401,57 +351,35 @@ public class ConvertLayout {
         return findKeyMap;
     }
 
-    /**
-     * Получить результирующий текст конвертации "на лету"
-     * @param inputTextBefore исходный текст до изменений
-     * @param inputTextAfter исходный текст после изменений
-     * @param resultTextBefore результирующий текст до изменений
-     * @return результирующий текст конвертации
-     */
-    public String getResultText(String inputTextBefore, String inputTextAfter, String resultTextBefore) {
-        StringBuilder sbInputText = new StringBuilder(inputTextAfter);
-        StringBuilder sbResultText = new StringBuilder();
-        for (int i = 0; i < inputTextAfter.length(); i++) {
-            String looking = String.valueOf(inputTextAfter.charAt(i));//что ищем
-            //String looking = "";
-            if (i < inputTextBefore.length() && (inputTextAfter.charAt(i) == inputTextBefore.charAt(i))) {
-                if (i < resultTextBefore.length()) {
-                    sbResultText.append(resultTextBefore.charAt(i));
-                    continue;
-                }
-            } /*else {
-                looking = String.valueOf(inputTextAfter.charAt(i));//что ищем
-            }*/
-            String found = findInUnionMap(looking);//найденное
-            if (found.equals("")) {
-                sbResultText.append(looking);
-            } else {
-                sbResultText.append(found);
-            }
-        }
-        return sbResultText.toString();
-    }
-
-    /**
-     * Получить результирующий текст конвертации
-     * @param inputText исходный текст
-     * @return результирующий текст
-     */
-    @Deprecated
-    public String getResultText(String inputText) {
-
-        StringBuilder sbResultText = new StringBuilder();
-        for (int i = 0; i < inputText.length(); i++) {
-            String looking = String.valueOf(inputText.charAt(i));//что ищем
-            String found = findInUnionMap(looking);//найденное
-            if (found.equals("")) {
-                sbResultText.append(looking);
-            } else {
-                sbResultText.append(found);
-            }
-        }
-        return sbResultText.toString();
-    }
+//    /**
+//     * Получить результирующий текст конвертации "на лету"
+//     * @param inputTextBefore исходный текст до изменений
+//     * @param inputTextAfter исходный текст после изменений
+//     * @param resultTextBefore результирующий текст до изменений
+//     * @return результирующий текст конвертации
+//     */
+//    public String getResultText(String inputTextBefore, String inputTextAfter, String resultTextBefore) {
+//        StringBuilder sbInputText = new StringBuilder(inputTextAfter);
+//        StringBuilder sbResultText = new StringBuilder();
+//        for (int i = 0; i < inputTextAfter.length(); i++) {
+//            String looking = String.valueOf(inputTextAfter.charAt(i));//что ищем
+//            //String looking = "";
+//            if (i < inputTextBefore.length() && (inputTextAfter.charAt(i) == inputTextBefore.charAt(i))) {
+//                if (i < resultTextBefore.length()) {
+//                    sbResultText.append(resultTextBefore.charAt(i));
+//                    continue;
+//                }
+//            }
+//
+//            String found = findInUnionMap(looking);//найденное
+//            if (found.equals("")) {
+//                sbResultText.append(looking);
+//            } else {
+//                sbResultText.append(found);
+//            }
+//        }
+//        return sbResultText.toString();
+//    }
 
     /**
      * Получить результирующий текст конвертации
@@ -471,29 +399,6 @@ public class ConvertLayout {
             }
         }
         return sbResultText.toString();
-    }
-
-    /**
-     * Найти символ в объеденной карте символов раскладок
-     * @param find искомый символ
-     * @return найденный сконвертированный символ
-     */
-    @Deprecated
-    private String findInUnionMap(String find) {
-
-        for (UnionMap unionMap : unionMaps) {
-
-            String inputTo = unescapeJava(unionMap.getInputMap().getTo());
-            inputTo = unescapeHtml(inputTo);
-            if (inputTo.equals(find)) {
-                String resultTo = unescapeJava(unionMap.getResultMap().getTo());
-                resultTo = unescapeHtml(resultTo);
-
-                return resultTo;
-            }
-        }
-
-        return "";
     }
 
     /**

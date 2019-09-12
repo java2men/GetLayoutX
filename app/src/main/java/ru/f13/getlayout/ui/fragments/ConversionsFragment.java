@@ -32,7 +32,6 @@ import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import ru.f13.getlayout.R;
@@ -46,8 +45,8 @@ import ru.f13.getlayout.ui.adapters.OnDeleteConversionListener;
 import ru.f13.getlayout.util.GLUtils;
 import ru.f13.getlayout.util.InputFilterAllLower;
 import ru.f13.getlayout.util.convert.ConvertLayout;
-import ru.f13.getlayout.util.convert.ModifierSequence;
-import ru.f13.getlayout.util.convert.ModifierSequenceBuilder;
+import ru.f13.getlayout.util.convert.sequence.ModifierSequence;
+import ru.f13.getlayout.util.convert.sequence.ModifierSequenceBuilder;
 import ru.f13.getlayout.viewmodel.ConversionsViewModel;
 
 public class ConversionsFragment extends Fragment {
@@ -63,7 +62,7 @@ public class ConversionsFragment extends Fragment {
     /**
      * Хранить последний результат конвертации
      */
-    private String lastResultText = "";
+    //private String lastResultText = "";
 
     /**
      * Код исходной раскладки
@@ -224,57 +223,35 @@ public class ConversionsFragment extends Fragment {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                System.out.println("------------beforeTextChanged s = " + s + " start = " + start + " count = " + count + " after = " + after);
+//                System.out.println("------------beforeTextChanged s = " + s + " start = " + start + " count = " + count + " after = " + after);
                 beforeInputText = s.toString();
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println("onTextChanged s = " + s + " start = " + start + " count = " + count + " before = " + before);
+//                System.out.println("onTextChanged s = " + s + " start = " + start + " count = " + count + " before = " + before);
 
-                if (s.length() == 0) return;
+                //пустоту игнорировать
+                if (s == null || s.length() == 0) {
+                    return;
+                }
 
                 boolean isReplace = before > 0;
-                int end = start + count;
-//                int end = 0;
-//                if (isReplace) {
-//                    end = start + before;
-//                } else {
-//                    end = start + count;
-//                }
-                String changed = s.subSequence(start, end).toString();
+                String changed = s.subSequence(start, start + count).toString();
                 boolean isShift = mBinding.cbShift.isChecked();
                 boolean isCaps = mBinding.cbCapsLock.isChecked();
                 ModifierSequence modSeq = new ModifierSequence(changed, isShift, isCaps);
 
                 if (isReplace) {
-//                    alInputText.delete(start, start + before);
                     msbInputText.remove(start, start + before);
                 }
 
-//                alInputText.insert(start, convertSequence);
                 msbInputText.add(start, modSeq);
-
-                System.out.println("onTextChanged sb.append = " + msbInputText.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                System.out.println("afterTextChanged s = " + s);
-
-//                afterInputText = s.toString();
-//
-//                //конвертировать текст при изменении текста редактора
-//                convertLayout.
-//                        unionKeyboard(
-//                                convertLayout.getKeyboard(inputCode),
-//                                convertLayout.getKeyboard(resultCode),
-//                                mBinding.cbShift.isChecked(),
-//                                mBinding.cbCapsLock.isChecked()
-//                        );
-//
-//                lastResultText = convertLayout.getResultText(beforeInputText, afterInputText, lastResultText);
-
+//                System.out.println("afterTextChanged s = " + s);
             }
         });
 
@@ -291,8 +268,9 @@ public class ConversionsFragment extends Fragment {
                             convertLayout.getKeyboard(inputCode),
                             convertLayout.getKeyboard(resultCode)
                     );
-                    lastResultText = convertLayout.getResultText(msbInputText);
-                    mViewModel.addConversionText(inputText, lastResultText);
+
+                    String resultText = convertLayout.getResultText(msbInputText);
+                    mViewModel.addConversionText(inputText, resultText);
 
                     msbInputText.clear();
                     editable.clear();
