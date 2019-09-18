@@ -5,27 +5,12 @@ package ru.f13.getlayout.util.convert.models;
  */
 public class UnionMap {
 
-    private String modifier;
     private Map inputMap;
     private Map resultMap;
 
     public UnionMap(Map inputMap, Map resultMap) {
         this.inputMap = inputMap;
         this.resultMap = resultMap;
-    }
-
-    public UnionMap(String modifier, Map inputMap, Map resultMap) {
-        this.modifier = modifier;
-        this.inputMap = inputMap;
-        this.resultMap = resultMap;
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
     }
 
     public Map getInputMap() {

@@ -11,7 +11,7 @@ public class Keyboard {
     private Version version;
     private Names names;
     private Settings settings;
-    private ArrayList<KeyMap> keyMaps;
+    private KeyMap keyMap;
 
     public String getLocale() {
         return locale;
@@ -45,11 +45,11 @@ public class Keyboard {
         this.settings = settings;
     }
 
-    public ArrayList<KeyMap> getKeyMaps() {
-        return keyMaps;
+    public KeyMap getKeyMap() {
+        return keyMap;
     }
 
-    public void setKeyMaps(ArrayList<KeyMap> keyMaps) {
-        this.keyMaps = keyMaps;
+    public void setKeyMap(KeyMap keyMap) {
+        this.keyMap = keyMap;
     }
 }

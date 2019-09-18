@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                //скрыть клавиатуру, когда открыли ящик
+                //скрыть клавиатуру
                 GLUtils.getInstance(getBaseContext()).hideKeyboard(activity);
             }
 

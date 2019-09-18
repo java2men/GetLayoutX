@@ -22,34 +22,10 @@ import ru.f13.getlayout.util.convert.models.Names;
 import ru.f13.getlayout.util.convert.models.Settings;
 import ru.f13.getlayout.util.convert.models.UnionMap;
 import ru.f13.getlayout.util.convert.models.Version;
-import ru.f13.getlayout.util.convert.sequence.ModifierSequence;
-import ru.f13.getlayout.util.convert.sequence.ModifierSequenceBuilder;
-
 /**
  * Created by IALozhnikov on 08.09.2016.
  */
 public class ConvertLayout {
-
-    /**
-     * Модификатор отсутствует
-     */
-    public static final String MODIFIER_NONE = "none";
-    /**
-     * Модификатор shift
-     */
-    public static final String MODIFIER_SHIFT = "shift";
-    /**
-     * Модификатор caps
-     */
-    public static final String MODIFIER_CAPS = "caps";
-    /**
-     * Модификатор caps+shift
-     */
-    public static final String MODIFIER_CAPS_SHIFT = "caps+shift";
-    /**
-     * Модификатор ctrl+caps
-     */
-    public static final String MODIFIER_CTRL_CAPS = "ctrl+caps";
 
     /**
      * Код русской раскладки
@@ -95,9 +71,6 @@ public class ConvertLayout {
             }
 
             if (codeLayout.equals(CODE_EN)) {
-                //AssetManager myAssetManager = getApplicationContext().getAssets();
-
-                //xmlPullParser = context.getAssets().openXmlResourceParser("keyboard_layouts/en-t-k0-windows.xml");
                 xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
                 InputStream is = context.getAssets().open("keyboard_layouts/en-t-k0-windows.xml");
                 Reader reader = new InputStreamReader(is);
@@ -142,8 +115,6 @@ public class ConvertLayout {
 
                     case XmlPullParser.START_TAG:
                         if (xmlPullParser.getName().toLowerCase().equals("keyboard")) {
-
-                            keyboard.setKeyMaps(new ArrayList<KeyMap>());
 
                             for (int i=0; i<xmlPullParser.getAttributeCount(); i++){
 
@@ -207,8 +178,7 @@ public class ConvertLayout {
                                 if (xmlPullParser.getAttributeName(i).toLowerCase().equals("modifiers")) keyMap.setModifiers(xmlPullParser.getAttributeValue(i));
                             }
 
-                            //keyMap.setIndex(keyboard.getKeyMap().size());
-                            keyboard.getKeyMaps().add(keyMap);
+                            keyboard.setKeyMap(keyMap);
                             break;
                         }
 
@@ -221,12 +191,9 @@ public class ConvertLayout {
                                 if (xmlPullParser.getAttributeName(i).toLowerCase().equals("to")) map.setTo(xmlPullParser.getAttributeValue(i));
                             }
 
-                            KeyMap lastKeyMap = keyboard.getKeyMaps().get(keyboard.getKeyMaps().size()-1);
+                            KeyMap keyMap = keyboard.getKeyMap();
+                            keyMap.getMaps().add(map);
 
-                            map.setKeyMap(lastKeyMap);
-
-                            //map.setIndexKeyMap(lastKeyMap.getIndex());
-                            lastKeyMap.getMaps().add(map);
                             break;
                         }
 
@@ -283,72 +250,32 @@ public class ConvertLayout {
             return;
         }
 
-        if (inputKeyboard.getKeyMaps() == null || resultKeyboard.getKeyMaps() == null) {
+        if (inputKeyboard.getKeyMap() == null || resultKeyboard.getKeyMap() == null) {
             return;
         }
 
         KeyMap inputKeyMap;
         KeyMap resultKeyMap;
-        String[] modifiers = {MODIFIER_NONE, MODIFIER_SHIFT, MODIFIER_CAPS, MODIFIER_CAPS_SHIFT};
         unionMaps = new ArrayList<>();
 
-        for (String modifier : modifiers) {
+        inputKeyMap = inputKeyboard.getKeyMap();
+        if (inputKeyMap == null) {
+            return;
+        }
 
-            inputKeyMap = findKeyMap(inputKeyboard, modifier);
-            if (inputKeyMap == null) {
-                return;
-            }
+        resultKeyMap = resultKeyboard.getKeyMap();
+        if (resultKeyMap == null) {
+            return;
+        }
 
-            resultKeyMap = findKeyMap(resultKeyboard, modifier);
-            if (resultKeyMap == null) {
-                return;
-            }
-
-            for (Map mapIKM : inputKeyMap.getMaps()) {
-                for (Map mapRKM : resultKeyMap.getMaps()) {
-                    if (mapIKM.getIso().equals(mapRKM.getIso())) {
-                        unionMaps.add(new UnionMap(modifier, mapIKM, mapRKM));
-                    }
+        for (Map mapIKM : inputKeyMap.getMaps()) {
+            for (Map mapRKM : resultKeyMap.getMaps()) {
+                if (mapIKM.getIso().equals(mapRKM.getIso())) {
+                    unionMaps.add(new UnionMap(mapIKM, mapRKM));
                 }
             }
-
         }
 
-    }
-
-    /**
-     * Найти {@link KeyMap}
-     * @param keyboard клавиатура
-     * @param modifier модификатор
-     * @return найденный объект {@link KeyMap}
-     */
-    private KeyMap findKeyMap (Keyboard keyboard, String modifier) {
-
-        if (keyboard == null) {
-            return null;
-        }
-
-        ArrayList<KeyMap> keyMaps = keyboard.getKeyMaps();
-        if (keyMaps == null) {
-            return null;
-        }
-
-        KeyMap findKeyMap = null;
-
-        for (int i = 0; i < keyMaps.size(); i++) {
-            KeyMap keyMap = keyMaps.get(i);
-
-            if (keyMap.getModifiers() == null && modifier.equals(MODIFIER_NONE)) {
-                findKeyMap = keyMap;
-                break;
-            } else if (keyMap.getModifiers() != null && keyMap.getModifiers().equals(modifier)) {
-                findKeyMap = keyMap;
-                break;
-            }
-
-        }
-
-        return findKeyMap;
     }
 
 //    /**
@@ -383,15 +310,14 @@ public class ConvertLayout {
 
     /**
      * Получить результирующий текст конвертации
-     * @param inputText исходный текст из списка последовательности {@link ModifierSequence}
      * @return результирующий текст
      */
-    public String getResultText(ModifierSequenceBuilder inputText) {
+    public String getResultText(CharSequence inputText) {
 
         StringBuilder sbResultText = new StringBuilder();
-        for (int i = 0; i < inputText.size(); i++) {
-            ModifierSequence looking = inputText.get(i);//что ищем
-            String found = findInUnionMap(looking);//найденное
+        for (int i = 0; i < inputText.length(); i++) {
+            Character looking = inputText.charAt(i);//что ищем
+            String found = findInUnionMap(looking.toString());//найденное
             if (found.equals("")) {
                 sbResultText.append(looking);
             } else {
@@ -403,16 +329,15 @@ public class ConvertLayout {
 
     /**
      * Найти символ в объеденной карте символов раскладок
-     * @param find искомый символ последовательности {@link ModifierSequence}
      * @return найденный сконвертированный символ
      */
-    private String findInUnionMap(ModifierSequence find) {
+    private String findInUnionMap(CharSequence find) {
 
         for (UnionMap unionMap : unionMaps) {
 
             String inputTo = unescapeJava(unionMap.getInputMap().getTo());
             inputTo = unescapeHtml(inputTo);
-            if (unionMap.getModifier().equals(find.getModifier()) && inputTo.equals(find.getSequence())) {
+            if (inputTo.contentEquals(find)) {
                 String resultTo = unescapeJava(unionMap.getResultMap().getTo());
                 resultTo = unescapeHtml(resultTo);
 

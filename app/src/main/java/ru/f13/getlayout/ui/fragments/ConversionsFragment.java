@@ -5,17 +5,13 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,10 +39,7 @@ import ru.f13.getlayout.ui.adapters.ConversionsAdapter;
 import ru.f13.getlayout.ui.adapters.OnCopyResultListener;
 import ru.f13.getlayout.ui.adapters.OnDeleteConversionListener;
 import ru.f13.getlayout.util.GLUtils;
-import ru.f13.getlayout.util.InputFilterAllLower;
 import ru.f13.getlayout.util.convert.ConvertLayout;
-import ru.f13.getlayout.util.convert.sequence.ModifierSequence;
-import ru.f13.getlayout.util.convert.sequence.ModifierSequenceBuilder;
 import ru.f13.getlayout.viewmodel.ConversionsViewModel;
 
 public class ConversionsFragment extends Fragment {
@@ -59,10 +52,6 @@ public class ConversionsFragment extends Fragment {
     private ConvertLayout convertLayout;
     private String beforeInputText = "";
     private String afterInputText = "";
-    /**
-     * Хранить последний результат конвертации
-     */
-    //private String lastResultText = "";
 
     /**
      * Код исходной раскладки
@@ -164,94 +153,10 @@ public class ConversionsFragment extends Fragment {
             }
         });
 
-        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                mBinding.tietInput.clearFocus();
-                return false;
-            }
-        };
-
-        mBinding.rvConversions.setOnTouchListener(onTouchListener);
-
         mBinding.tietInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-
                 selectTvInput(hasFocus);
-
-                if (hasFocus) {
-                    mBinding.clModifiers.setVisibility(View.VISIBLE);
-                } else {
-                    mBinding.clModifiers.setVisibility(View.GONE);
-                }
-
-            }
-        });
-
-        mBinding.ivInfoModifiers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)requireActivity()).
-                        showCustomToast(R.string.info_modifiers, Toast.LENGTH_LONG);
-            }
-        });
-
-        //фильровать текст редактора в зависимости от модификатора
-        mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
-
-        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mBinding.cbShift.isChecked() && !mBinding.cbCapsLock.isChecked()) {
-                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
-                } else if (mBinding.cbCapsLock.isChecked() && !mBinding.cbShift.isChecked()) {
-                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
-                } else if (mBinding.cbShift.isChecked() && mBinding.cbCapsLock.isChecked()) {
-                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
-                }  else if (!mBinding.cbShift.isChecked() && !mBinding.cbCapsLock.isChecked()) {
-                    mBinding.tietInput.setFilters(new InputFilter[] {new InputFilterAllLower()});
-                }
-            }
-        };
-
-        mBinding.cbShift.setOnCheckedChangeListener(onCheckedChangeListener);
-        mBinding.cbCapsLock.setOnCheckedChangeListener(onCheckedChangeListener);
-
-        final ModifierSequenceBuilder msbInputText = new ModifierSequenceBuilder();
-        mBinding.tietInput.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                System.out.println("------------beforeTextChanged s = " + s + " start = " + start + " count = " + count + " after = " + after);
-                beforeInputText = s.toString();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                System.out.println("onTextChanged s = " + s + " start = " + start + " count = " + count + " before = " + before);
-
-                //пустоту игнорировать
-                if (s == null || s.length() == 0) {
-                    return;
-                }
-
-                boolean isReplace = before > 0;
-                String changed = s.subSequence(start, start + count).toString();
-                boolean isShift = mBinding.cbShift.isChecked();
-                boolean isCaps = mBinding.cbCapsLock.isChecked();
-                ModifierSequence modSeq = new ModifierSequence(changed, isShift, isCaps);
-
-                if (isReplace) {
-                    msbInputText.remove(start, start + before);
-                }
-
-                msbInputText.add(start, modSeq);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-//                System.out.println("afterTextChanged s = " + s);
             }
         });
 
@@ -269,10 +174,9 @@ public class ConversionsFragment extends Fragment {
                             convertLayout.getKeyboard(resultCode)
                     );
 
-                    String resultText = convertLayout.getResultText(msbInputText);
+                    String resultText = convertLayout.getResultText(inputText);
                     mViewModel.addConversionText(inputText, resultText);
 
-                    msbInputText.clear();
                     editable.clear();
 
                 }
@@ -326,6 +230,7 @@ public class ConversionsFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete_all) {
 
+            //скрыть клавиатуру
             glUtils.hideKeyboard(getView());
 
             Context context = mBinding.rvConversions.getContext();

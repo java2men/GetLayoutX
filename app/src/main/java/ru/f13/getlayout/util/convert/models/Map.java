@@ -7,7 +7,6 @@ public class Map {
 
     private String iso;
     private String to;
-    private KeyMap keyMap;
 
     public String getIso() {
         return iso;
@@ -25,11 +24,4 @@ public class Map {
         this.to = to;
     }
 
-    public KeyMap getKeyMap() {
-        return keyMap;
-    }
-
-    public void setKeyMap(KeyMap keyMap) {
-        this.keyMap = keyMap;
-    }
 }
