@@ -22,7 +22,8 @@
             android:gravity="center"
             android:text="@{aboutText}"
             android:textAlignment="center"
-            android:textAppearance="@style/TextRegular"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/material_on_surface_emphasis_high_type"
             android:textSize="18sp"
             android:textIsSelectable="true"
             tools:text="@string/about_summary" />

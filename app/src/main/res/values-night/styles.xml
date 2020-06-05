@@ -10,13 +10,20 @@
 <!--        <item name="android:navigationBarColor">@color/colorNavigationBar</item>-->
 <!--    </style>-->
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="android:elevation">0dp</item>
-    </style>
+<!--    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">-->
+<!--        <item name="android:elevation">0dp</item>-->
+<!--    </style>-->
 
-    <style name="DirectionStyle" parent="Widget.MaterialComponents.CardView">
-        <item name="cardElevation">0dp</item>
-    </style>
+<!--    <style name="DirectionStyle" parent="Widget.MaterialComponents.CardView">-->
+<!--        <item name="cardElevation">0dp</item>-->
+<!--    </style>-->
+
+<!--    <style name="Widget.MyTheme.NavigationView" parent="Widget.MaterialComponents.NavigationView">-->
+<!--        <item name="itemTextAppearance">?attr/textAppearanceBody2</item>-->
+<!--        <item name="itemIconTint">@color/white_50</item>-->
+<!--        <item name="itemTextColor">@color/white_50</item>-->
+<!--        <item name="android:colorControlHighlight">@color/white_50</item>-->
+<!--    </style>-->
 
     <style name="RippleStyle">
         <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
