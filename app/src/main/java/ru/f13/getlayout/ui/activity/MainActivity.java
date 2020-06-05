@@ -1,6 +1,5 @@
 package ru.f13.getlayout.ui.activity;
 
-import android.app.ActivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -10,15 +9,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
@@ -26,7 +23,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
-import ru.f13.getlayout.GLApp;
 import ru.f13.getlayout.R;
 import ru.f13.getlayout.util.GLUtils;
 import ru.f13.getlayout.util.ThemeHelper;
@@ -50,19 +46,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-
-        if (mMainViewModel.getDarkThemeValue()) {
-            ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
-        } else {
-            ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
-        }
+//        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         super.onCreate(savedInstanceState);
 
-        subscribeUi(mMainViewModel);
-
         setContentView(R.layout.activity_main);
+
+        mMainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        subscribeUi(mMainViewModel);
 
         glUtils = GLUtils.getInstance(getBaseContext());
 
@@ -208,6 +199,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onChanged(Boolean value) {
                 isNotExitAlert = value;
+            }
+        });
+
+        viewModel.getDarkTheme().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isChange) {
+                if (isChange) {
+                    ThemeHelper.applyTheme(ThemeHelper.DARK_MODE);
+                } else {
+                    ThemeHelper.applyTheme(ThemeHelper.LIGHT_MODE);
+                }
             }
         });
 

@@ -46,12 +46,12 @@ public class MainViewModel extends AndroidViewModel {
         return mRepository.getDarkTheme();
     }
 
-    /**
-     * Получить значене настройки "использовать темную тему"
-     * @return true - используется темная тема, false - не используется темная тема
-     */
-    public boolean getDarkThemeValue() {
-        return mRepository.getDarkThemeValue();
-    }
+//    /**
+//     * Получить значене настройки "использовать темную тему"
+//     * @return true - используется темная тема, false - не используется темная тема
+//     */
+//    public boolean getDarkThemeValue() {
+//        return mRepository.getDarkThemeValue();
+//    }
 
 }

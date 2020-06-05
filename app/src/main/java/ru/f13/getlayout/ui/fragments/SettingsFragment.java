@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import ru.f13.getlayout.R;
 import ru.f13.getlayout.databinding.FragmentSettingsBinding;
@@ -39,7 +39,7 @@ public class SettingsFragment extends Fragment {
 
         requireActivity().setTitle(R.string.settings);
 
-        final SettingsViewModel viewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        final SettingsViewModel viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         mBinding.clSaveData.setOnClickListener(new View.OnClickListener() {
             @Override

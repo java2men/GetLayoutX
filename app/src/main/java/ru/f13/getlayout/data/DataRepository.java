@@ -160,13 +160,13 @@ public class DataRepository {
         return mAppPreferences.getDarkTheme();
     }
 
-    /**
-     * Получить значение настройки "использовать темную тему"
-     * @return true - используется темная тема, false - не используется темная тема
-     */
-    public boolean getDarkThemeValue() {
-        return mAppPreferences.getDarkThemeValue();
-    }
+//    /**
+//     * Получить значение настройки "использовать темную тему"
+//     * @return true - используется темная тема, false - не используется темная тема
+//     */
+//    public boolean getDarkThemeValue() {
+//        return mAppPreferences.getDarkThemeValue();
+//    }
 
     /**
      * Установить настройку "использовать темную тему"

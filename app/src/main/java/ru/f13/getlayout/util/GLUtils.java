@@ -173,13 +173,17 @@ public class GLUtils {
         toast.setGravity(gravity, xOffsetPx, yOffsetPx);
         toast.setDuration(duration);
 
-        View layout =  LayoutInflater.from(mContext)
-                .inflate(R.layout.layout_custom_toast, null, false);
+//        View layout =  LayoutInflater.from(mContext)
+//                .inflate(R.layout.layout_custom_toast, null, false);
+//
+//        TextView tv = layout.findViewById(R.id.tvText);
+//        tv.setText(resIdText);
+//
+//        toast.setView(layout);
 
-        TextView tv = layout.findViewById(R.id.tvText);
-        tv.setText(resIdText);
 
-        toast.setView(layout);
+        toast = Toast.makeText(mContext, resIdText, duration);
+        toast.setGravity(gravity, xOffsetPx, yOffsetPx);
 
         return toast;
 

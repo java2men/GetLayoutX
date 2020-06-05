@@ -19,11 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -137,10 +136,11 @@ public class ConversionsFragment extends Fragment {
             @Override
             public void onDelete(final int id, String dateText) {
 
-                Context context = mBinding.rvConversions.getContext();
-                Snackbar snackbar = Snackbar.
-                        make(mBinding.getRoot(), getString(R.string.delete_for, dateText), Snackbar.LENGTH_LONG).
-                        setActionTextColor(ContextCompat.getColorStateList(context, R.color.white_50)).
+                //Context context = mBinding.rvConversions.getContext();
+                final Snackbar snackbar = Snackbar.
+                        make(mBinding.mcvInput, getString(R.string.delete_for, dateText), Snackbar.LENGTH_LONG).
+                        setAnchorView(mBinding.mcvInput).
+                        //setActionTextColor(ContextCompat.getColorStateList(context, R.color.white_50)).
                         setAction(R.string.yes, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -149,7 +149,12 @@ public class ConversionsFragment extends Fragment {
                             }
                         });
 
-                snackbar.show();
+                mBinding.getRoot().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        snackbar.show();
+                    }
+                });
             }
         });
 
@@ -191,7 +196,7 @@ public class ConversionsFragment extends Fragment {
 
         requireActivity().setTitle(R.string.get_layout);
 
-        mViewModel = ViewModelProviders.of(this).get(ConversionsViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(ConversionsViewModel.class);
         subscribeUi(mViewModel);
 
     }
@@ -236,7 +241,6 @@ public class ConversionsFragment extends Fragment {
             Context context = mBinding.rvConversions.getContext();
             Snackbar snackbar = Snackbar.
                     make(mBinding.getRoot(), getString(R.string.delete_history), Snackbar.LENGTH_LONG).
-                    setActionTextColor(ContextCompat.getColorStateList(context, R.color.white_50)).
                     setAction(R.string.yes, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -259,7 +263,7 @@ public class ConversionsFragment extends Fragment {
      */
     private void subscribeUi(final ConversionsViewModel viewModel) {
 
-        viewModel.getConversions().observe(this, new Observer<List<ConversionEntity>>() {
+        viewModel.getConversions().observe(getViewLifecycleOwner(), new Observer<List<ConversionEntity>>() {
             @Override
             public void onChanged(@Nullable List<ConversionEntity> conversions) {
                 if (conversions != null) {
@@ -290,14 +294,14 @@ public class ConversionsFragment extends Fragment {
             }
         });
 
-        viewModel.getSaveData().observe(this, new Observer<Boolean>() {
+        viewModel.getSaveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 isSaveData = value;
             }
         });
 
-        viewModel.getConversionOptions().observe(this, new Observer<ConversionOptions>() {
+        viewModel.getConversionOptions().observe(getViewLifecycleOwner(), new Observer<ConversionOptions>() {
             @Override
             public void onChanged(ConversionOptions conversionOptions) {
 
