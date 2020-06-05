@@ -114,10 +114,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //определять цвет для Recent Apps
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription(new ActivityManager.
-                    TaskDescription(null, null,
-                    ContextCompat.getColor(getBaseContext(), R.color.colorPrimary))
-            );
+//            setTaskDescription(new ActivityManager.
+//                    TaskDescription(null, null,
+//                    ContextCompat.getColor(getBaseContext(), R.color.colorPrimary))
+//            );
         }
     }
 

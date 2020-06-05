@@ -140,7 +140,7 @@ public class ConversionsFragment extends Fragment {
                 Context context = mBinding.rvConversions.getContext();
                 Snackbar snackbar = Snackbar.
                         make(mBinding.getRoot(), getString(R.string.delete_for, dateText), Snackbar.LENGTH_LONG).
-                        setActionTextColor(ContextCompat.getColorStateList(context, R.color.colorWhite)).
+                        setActionTextColor(ContextCompat.getColorStateList(context, R.color.white_50)).
                         setAction(R.string.yes, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -213,7 +213,7 @@ public class ConversionsFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.main, menu);
@@ -236,7 +236,7 @@ public class ConversionsFragment extends Fragment {
             Context context = mBinding.rvConversions.getContext();
             Snackbar snackbar = Snackbar.
                     make(mBinding.getRoot(), getString(R.string.delete_history), Snackbar.LENGTH_LONG).
-                    setActionTextColor(ContextCompat.getColorStateList(context, R.color.colorWhite)).
+                    setActionTextColor(ContextCompat.getColorStateList(context, R.color.white_50)).
                     setAction(R.string.yes, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

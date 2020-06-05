@@ -12,7 +12,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
         tools:context=".ui.fragments.AboutFragment">
 
         <!-- TODO: Update blank fragment layout -->
@@ -24,7 +23,6 @@
             android:text="@{aboutText}"
             android:textAlignment="center"
             android:textAppearance="@style/TextRegular"
-            android:textColor="@color/colorContent"
             android:textSize="18sp"
             android:textIsSelectable="true"
             tools:text="@string/about_summary" />
