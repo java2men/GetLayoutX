@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 /**
  * LiveData для булевой настройки
  */
-public class SharedPreferenceBooleanLiveData extends SharedPreferenceLiveData<Boolean>{
+class SharedPreferenceBooleanLiveData extends SharedPreferenceLiveData<Boolean>{
 
-    public SharedPreferenceBooleanLiveData(SharedPreferences prefs, String key, Boolean defValue) {
+    SharedPreferenceBooleanLiveData(SharedPreferences prefs, String key, Boolean defValue) {
         super(prefs, key, defValue);
     }
 

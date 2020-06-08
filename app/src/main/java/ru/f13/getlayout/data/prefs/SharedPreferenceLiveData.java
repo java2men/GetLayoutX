@@ -10,9 +10,9 @@ import androidx.lifecycle.MutableLiveData;
  */
 abstract class SharedPreferenceLiveData<T> extends MutableLiveData<T> {
 
-    SharedPreferences sharedPrefs;
-    String key;
-    T defValue;
+    protected SharedPreferences sharedPrefs;
+    private String key;
+    private T defValue;
 
     /**
      * Конструктор
@@ -20,10 +20,12 @@ abstract class SharedPreferenceLiveData<T> extends MutableLiveData<T> {
      * @param key ключ
      * @param defValue дефолтное значение
      */
-    public SharedPreferenceLiveData(SharedPreferences prefs, String key, T defValue) {
+    SharedPreferenceLiveData(SharedPreferences prefs, String key, T defValue) {
         this.sharedPrefs = prefs;
         this.key = key;
         this.defValue = defValue;
+
+        setValue(getValueFromPreferences(key, defValue));
     }
 
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -46,7 +48,6 @@ abstract class SharedPreferenceLiveData<T> extends MutableLiveData<T> {
     @Override
     protected void onActive() {
         super.onActive();
-        setValue(getValueFromPreferences(key, defValue));
         sharedPrefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 

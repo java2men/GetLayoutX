@@ -1,7 +1,6 @@
 package ru.f13.getlayout.ui.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +32,6 @@ import ru.f13.getlayout.R;
 import ru.f13.getlayout.data.db.entity.ConversionEntity;
 import ru.f13.getlayout.data.model.ConversionOptions;
 import ru.f13.getlayout.databinding.FragmentConversionsBinding;
-import ru.f13.getlayout.ui.activity.MainActivity;
 import ru.f13.getlayout.ui.adapters.ConversionsAdapter;
 import ru.f13.getlayout.ui.adapters.OnCopyResultListener;
 import ru.f13.getlayout.ui.adapters.OnDeleteConversionListener;
@@ -44,7 +41,13 @@ import ru.f13.getlayout.viewmodel.ConversionsViewModel;
 
 public class ConversionsFragment extends Fragment {
 
+    /**
+     * Предлагать подсказки для ввода
+     */
     private int YES_SUGGESTIONS = InputType.TYPE_TEXT_FLAG_MULTI_LINE;
+    /**
+     * Не предлагать подсказки для ввода
+     */
     private int NO_SUGGESTIONS =
             InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
@@ -73,8 +76,6 @@ public class ConversionsFragment extends Fragment {
      */
     private boolean isSaveData = true;
 
-    private GLUtils glUtils;
-
     private MenuItem miDeleteAll;
 
     /**
@@ -89,8 +90,6 @@ public class ConversionsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        glUtils = GLUtils.getInstance(getContext());
     }
 
     @Override
@@ -248,7 +247,7 @@ public class ConversionsFragment extends Fragment {
         if (id == R.id.action_delete_all) {
 
             //скрыть клавиатуру
-            glUtils.hideKeyboard(getView());
+            GLUtils.hideKeyboard(getView());
 
             Snackbar snackbar = Snackbar.
                     make(mBinding.getRoot(), getString(R.string.delete_history), Snackbar.LENGTH_LONG).
@@ -273,7 +272,6 @@ public class ConversionsFragment extends Fragment {
      * @param viewModel объект {@link androidx.lifecycle.ViewModel}
      */
     private void subscribeUi(ConversionsViewModel viewModel) {
-
         viewModel.getConversions().observe(getViewLifecycleOwner(), new Observer<List<ConversionEntity>>() {
             @Override
             public void onChanged(@Nullable List<ConversionEntity> conversions) {
@@ -315,7 +313,6 @@ public class ConversionsFragment extends Fragment {
         viewModel.getConversionOptions().observe(getViewLifecycleOwner(), new Observer<ConversionOptions>() {
             @Override
             public void onChanged(ConversionOptions conversionOptions) {
-
                 if (conversionOptions.isSaveData()) {
                     inputCode = conversionOptions.getInputCode();
                     resultCode = conversionOptions.getResultCode();
@@ -337,6 +334,8 @@ public class ConversionsFragment extends Fragment {
             }
         });
 
+
+
     }
 
     /**
@@ -355,7 +354,7 @@ public class ConversionsFragment extends Fragment {
         set.clear(R.id.tvDir2, ConstraintSet.START);
         set.clear(R.id.tvDir2, ConstraintSet.END);
 
-        int marginPx = (int) glUtils.dpToPx(16);
+        int marginPx = (int) GLUtils.dpToPx(requireContext(), 16);
 
         if (inputCode.equals(ConvertLayout.CODE_RU)) {
             set.connect(R.id.tvDir1, ConstraintSet.START, R.id.clDir, ConstraintSet.START, marginPx);

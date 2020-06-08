@@ -52,7 +52,6 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
     private RecyclerView mRecyclerView;
 
     private ClipboardManager clipboard;
-    private GLUtils glUtils;
 
     private OnCopyResultListener mOnCopyResultListener;
     private OnDeleteConversionListener mOnDeleteConversionListener;
@@ -65,7 +64,6 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
 
         setHasStableIds(true);
         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        glUtils = GLUtils.getInstance(context);
     }
 
     /**
@@ -200,7 +198,7 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
                     if (binding.tvResultText.getText() != null) {
                         String text = binding.getConversion().getResultText();
                         Context context = binding.getRoot().getContext();
-                        GLUtils.getInstance(context).hideKeyboard(binding.ivCopy);
+                        GLUtils.hideKeyboard(binding.ivCopy);
                         copyTextAndNotify(text);
                     }
                 }
@@ -212,7 +210,7 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
                     if (binding.tvResultText.getText() != null) {
                         String text = binding.getConversion().getResultText();
                         Context context = binding.getRoot().getContext();
-                        GLUtils.getInstance(context).hideKeyboard(binding.getRoot());
+                        GLUtils.hideKeyboard(binding.getRoot());
                         shareText(context, text);
                     }
                 }
@@ -229,7 +227,7 @@ public class ConversionsAdapter extends RecyclerView.Adapter<ConversionsAdapter.
                     int id = binding.getConversion().getId();
                     String dateText = binding.getConversion().getDateText();
                     Context context = binding.getRoot().getContext();
-                    GLUtils.getInstance(context).hideKeyboard(binding.getRoot());
+                    GLUtils.hideKeyboard(binding.getRoot());
 
                     mOnDeleteConversionListener.onDelete(id, dateText);
                 }

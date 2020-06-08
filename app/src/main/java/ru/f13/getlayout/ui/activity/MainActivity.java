@@ -1,5 +1,6 @@
 package ru.f13.getlayout.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -41,12 +42,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isNotExitAlert = false;
     private long timeLastPressExit = 0 - PERIOD_FOR_EXIT;
 
-    private GLUtils glUtils;
+//    private GLUtils glUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-//        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         super.onCreate(savedInstanceState);
 
@@ -54,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mMainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         subscribeUi(mMainViewModel);
-
-        glUtils = GLUtils.getInstance(getBaseContext());
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 //скрыть клавиатуру
-                GLUtils.getInstance(getBaseContext()).hideKeyboard(activity);
+                GLUtils.hideKeyboard(activity);
             }
 
             @Override
@@ -243,9 +240,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     public void showCustomToast(int resIdText, int duration) {
         int offsetX = 0;
-        int offsetY = (int) glUtils.dpToPx(64);
-        Toast toast = glUtils.
-                createToastCustom(resIdText, duration, Gravity.BOTTOM, offsetX, offsetY);
+        int offsetY = (int) GLUtils.dpToPx(getBaseContext(), 64);
+//        Toast toast = GLUtils.
+//                createToastCustom(
+//                        getBaseContext(), resIdText, duration, Gravity.BOTTOM, offsetX, offsetY
+//                );
+//        toast.show();
+
+        @SuppressLint("ShowToast") Toast toast =
+                Toast.makeText(getBaseContext(), resIdText, duration);
+        toast.setGravity(Gravity.BOTTOM, offsetX, offsetY);
+
         toast.show();
     }
 

@@ -1,5 +1,6 @@
 package ru.f13.getlayout.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -17,44 +18,12 @@ import ru.f13.getlayout.R;
  */
 public class GLUtils {
 
-    private static GLUtils sInstance;
-
-    private Context mContext;
-
-    /**
-     * Конкструктор
-     * @param context контекст
-     */
-    private GLUtils(Context context) {
-
-        mContext = context;
-
-    }
-
-    /**
-     * Получить инстанс
-     * @param context контекст
-     * @return объект {@link GLUtils}
-     */
-    public static GLUtils getInstance(Context context) {
-
-        if (sInstance == null) {
-            synchronized (GLUtils.class) {
-                if (sInstance == null) {
-                    sInstance = new GLUtils(context);
-                }
-            }
-        }
-        return sInstance;
-    }
-
-
     /**
      * Отображается ли в данный момент клавиатура
      * @param context контекст
      * @return true - да, false - нет
      */
-    public boolean isShowKeyboard(Context context) {
+    public static boolean isShowKeyboard(Context context) {
 
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         boolean active = false;
@@ -71,7 +40,7 @@ public class GLUtils {
      * @param activityContext контекст активности
      * @param view view, где треубуется отобразить клавиатуру
      */
-    public void showKeyboard(Context activityContext, final View view){
+    public static void showKeyboard(Context activityContext, final View view){
 
         final InputMethodManager imm = (InputMethodManager)
                 view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -94,7 +63,7 @@ public class GLUtils {
      * Скрыть клавиатуру для view
      * @param view ссылка на view для которого требуется скрыть клавиатуру
      */
-    public void hideKeyboardFrom(Context activityContext, View view) {
+    public static void hideKeyboardFrom(Context activityContext, View view) {
         if (view == null) {
             return;
         }
@@ -109,7 +78,7 @@ public class GLUtils {
      * Скрыть клавиатуру в активности
      * @param activity ссылка на активность
      */
-    public void hideKeyboard(Activity activity) {
+    public static void hideKeyboard(Activity activity) {
         if (activity == null) {
             return;
         }
@@ -124,12 +93,14 @@ public class GLUtils {
 
     /**
      * Скрыть клавиатуру для view
-     * @param view
+     * @param view вьюв
      */
-    public void hideKeyboard(View view) {
+    public static void hideKeyboard(View view) {
+
+        if (view == null) {return;}
 
         InputMethodManager imm =
-                (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -141,10 +112,10 @@ public class GLUtils {
      * @param dp количество точек на дюйм
      * @return количество пикселей
      */
-    public float dpToPx(int dp) {
+    public static float dpToPx(Context context, int dp) {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dp,
-                mContext.getResources().getDisplayMetrics());
+                context.getResources().getDisplayMetrics());
     }
 
     /**
@@ -152,14 +123,15 @@ public class GLUtils {
      * @param px количество пикселей
      * @return количество точек на дюйм
      */
-    public float pxToDp(int px){
+    public static float pxToDp(Context context, int px){
 
-        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return px / (metrics.densityDpi / 160f);
     }
 
     /**
      * Создать кастомный {@link Toast}
+     * @param context контекст
      * @param resIdText id ресурса текста
      * @param duration продолжительность
      * @param gravity позиция
@@ -167,23 +139,26 @@ public class GLUtils {
      * @param yOffsetPx смещение в пикселях по Y
      * @return {@link Toast}
      */
-    public Toast createToastCustom(int resIdText, int duration, int gravity, int xOffsetPx, int yOffsetPx) {
+    public static Toast createToastCustom(
+            Context context,
+            int resIdText,
+            int duration,
+            int gravity,
+            int xOffsetPx,
+            int yOffsetPx
+    ) {
 
-        Toast toast = new Toast(mContext);
+        Toast toast = new Toast(context);
         toast.setGravity(gravity, xOffsetPx, yOffsetPx);
         toast.setDuration(duration);
 
-//        View layout =  LayoutInflater.from(mContext)
-//                .inflate(R.layout.layout_custom_toast, null, false);
-//
-//        TextView tv = layout.findViewById(R.id.tvText);
-//        tv.setText(resIdText);
-//
-//        toast.setView(layout);
+        @SuppressLint("InflateParams") View layout =  LayoutInflater.from(context)
+                .inflate(R.layout.layout_custom_toast, null, false);
 
+        TextView tv = layout.findViewById(R.id.tvText);
+        tv.setText(resIdText);
 
-        toast = Toast.makeText(mContext, resIdText, duration);
-        toast.setGravity(gravity, xOffsetPx, yOffsetPx);
+        toast.setView(layout);
 
         return toast;
 

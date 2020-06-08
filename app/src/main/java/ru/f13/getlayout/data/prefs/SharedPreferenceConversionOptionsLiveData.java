@@ -11,7 +11,7 @@ import ru.f13.getlayout.data.model.ConversionOptions;
  */
 public class SharedPreferenceConversionOptionsLiveData extends SharedPreferenceLiveData<ConversionOptions>{
 
-    public SharedPreferenceConversionOptionsLiveData(SharedPreferences prefs, String key, ConversionOptions defValue) {
+    SharedPreferenceConversionOptionsLiveData(SharedPreferences prefs, String key, ConversionOptions defValue) {
         super(prefs, key, defValue);
     }
 

@@ -20,7 +20,7 @@ import ru.f13.getlayout.databinding.FragmentAboutBinding;
 
 public class AboutFragment extends Fragment {
 
-    FragmentAboutBinding mBinding;
+    private FragmentAboutBinding mBinding;
 
     public AboutFragment() {
         // Required empty public constructor
