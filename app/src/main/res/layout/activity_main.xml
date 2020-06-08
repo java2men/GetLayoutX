@@ -22,6 +22,7 @@
         android:fitsSystemWindows="true"
         android:backgroundTint="?colorSurface"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer"
+        tools:ignore="UnusedAttribute" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

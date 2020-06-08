@@ -18,6 +18,8 @@ package ru.f13.getlayout;
 
 import android.app.Application;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import ru.f13.getlayout.data.DataRepository;
 import ru.f13.getlayout.data.db.AppDatabase;
 import ru.f13.getlayout.data.prefs.AppPreferences;
@@ -27,6 +29,9 @@ public class GLApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // Operations on FirebaseCrashlytics.
+        FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
     }
 
     /**

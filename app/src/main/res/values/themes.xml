@@ -20,7 +20,7 @@
         <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
         <!--and menus. colorError is used to indicate an error state for components such as-->
         <!--text fields.-->
-        <item name="android:colorBackground">@color/grey_100</item>
+        <item name="android:colorBackground">@color/grey_300</item>
         <item name="colorSurface">@color/white_50</item>
         <item name="colorError">@color/red_600</item>
         <!--"On" colors define how text, icons and strokes are colored in relation to the surface-->
@@ -57,7 +57,7 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
         <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
-        <item name="elevationOverlayEnabled">true</item>
+<!--        <item name="elevationOverlayEnabled">true</item>-->
     </style>
     <style name="Base.Theme.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 <!--        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>-->

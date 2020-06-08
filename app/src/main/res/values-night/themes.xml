@@ -8,7 +8,7 @@
         <item name="colorSecondary">@color/cyan_500</item>
         <item name="colorSecondaryVariant">@color/cyan_700</item>
         <item name="android:colorBackground">@color/black_900</item>
-        <item name="colorSurface">@color/black_800</item>
+        <item name="colorSurface">@color/grey_900</item>
         <item name="colorError">@color/red_200</item>
         <item name="colorOnPrimary">@color/black_900</item>
         <item name="colorOnSecondary">@color/black_900</item>
@@ -16,7 +16,7 @@
         <item name="colorOnSurface">@color/white_50</item>
         <item name="colorOnError">@color/black_900</item>
 
-        <item name="elevationOverlayEnabled">false</item>
+<!--        <item name="elevationOverlayEnabled">false</item>-->
 
         <!--Statusbar (dark theme) -->
         <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>

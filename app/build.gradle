@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -9,7 +10,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 9
-        versionName "3.5"
+        versionName "3.5-b1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables {
@@ -42,8 +43,9 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:2.2.2"
     implementation "androidx.room:room-runtime:2.2.5"
     annotationProcessor "android.arch.persistence.room:compiler:2.1.0"
-    implementation 'com.google.firebase:firebase-analytics:17.4.2'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.1'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
 
     implementation 'eu.davidea:flexible-adapter-ui:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.6'
