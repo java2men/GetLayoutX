@@ -127,8 +127,19 @@ public class ConversionsFragment extends Fragment {
         mConversionsAdapter.setOnCopyResultListener(new OnCopyResultListener() {
             @Override
             public void onCopy() {
-                ((MainActivity)requireActivity()).
-                        showCustomToast(R.string.notification_copy_result, Toast.LENGTH_SHORT);
+//                ((MainActivity)requireActivity()).
+//                        showCustomToast(R.string.notification_copy_result, Toast.LENGTH_SHORT);
+
+                final Snackbar snackbar = Snackbar
+                        .make(mBinding.mcvInput, getString(R.string.notification_copy_result), Snackbar.LENGTH_LONG);
+
+                snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                snackbar.show();
             }
         });
 
@@ -137,9 +148,8 @@ public class ConversionsFragment extends Fragment {
             public void onDelete(final int id, String dateText) {
 
                 //Context context = mBinding.rvConversions.getContext();
-                final Snackbar snackbar = Snackbar.
+                Snackbar snackbar = Snackbar.
                         make(mBinding.mcvInput, getString(R.string.delete_for, dateText), Snackbar.LENGTH_LONG).
-                        setAnchorView(mBinding.mcvInput).
                         //setActionTextColor(ContextCompat.getColorStateList(context, R.color.white_50)).
                         setAction(R.string.yes, new View.OnClickListener() {
                             @Override
@@ -149,12 +159,7 @@ public class ConversionsFragment extends Fragment {
                             }
                         });
 
-                mBinding.getRoot().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        snackbar.show();
-                    }
-                });
+                snackbar.show();
             }
         });
 
