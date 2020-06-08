@@ -33,7 +33,9 @@
     <string name="exit_alert_title">Не уведомлять о выходе</string>
     <string name="exit_alert_summary">Не задавать вопрос о выходе из приложения?</string>
     <string name="dark_theme_title">Использовать темную тему</string>
-    <string name="dark_theme_summary">Требуется перезагрузка</string>
+    <string name="dark_theme_summary">Может потребоваться перезагрузка</string>
+    <string name="suggestions_title">Подсказки клавиатуры</string>
+    <string name="suggestions_summary">Разрешить клавиатуре подсказывать</string>
 
     <string name="click_exit_application">Нажмите еще раз для выхода из приложения</string>
 

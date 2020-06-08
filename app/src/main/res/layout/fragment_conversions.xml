@@ -181,7 +181,6 @@
                     android:imeOptions="actionDone"
                     android:inputType="textVisiblePassword|textNoSuggestions|textMultiLine"
                     android:maxHeight="96dp"
-
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/ivSend"
                     app:layout_constraintStart_toStartOf="parent"

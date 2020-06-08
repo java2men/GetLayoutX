@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,14 +44,11 @@ import ru.f13.getlayout.viewmodel.ConversionsViewModel;
 
 public class ConversionsFragment extends Fragment {
 
-    private ConversionsAdapter mConversionsAdapter;
-    private FragmentConversionsBinding mBinding;
-
-    private ConversionsViewModel mViewModel;
-
-    private ConvertLayout convertLayout;
-    private String beforeInputText = "";
-    private String afterInputText = "";
+    private int YES_SUGGESTIONS = InputType.TYPE_TEXT_FLAG_MULTI_LINE;
+    private int NO_SUGGESTIONS =
+            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            | InputType.TYPE_TEXT_FLAG_MULTI_LINE;
 
     /**
      * Код исходной раскладки
@@ -60,6 +58,15 @@ public class ConversionsFragment extends Fragment {
      * Код результирующей раскладки
      */
     private String resultCode = ConvertLayout.CODE_EN;
+
+    private ConversionsAdapter mConversionsAdapter;
+    private FragmentConversionsBinding mBinding;
+
+    private ConversionsViewModel mViewModel;
+
+    private ConvertLayout convertLayout;
+    private String beforeInputText = "";
+    private String afterInputText = "";
 
     /**
      * Возможность сохранения данных
@@ -243,7 +250,6 @@ public class ConversionsFragment extends Fragment {
             //скрыть клавиатуру
             glUtils.hideKeyboard(getView());
 
-            Context context = mBinding.rvConversions.getContext();
             Snackbar snackbar = Snackbar.
                     make(mBinding.getRoot(), getString(R.string.delete_history), Snackbar.LENGTH_LONG).
                     setAction(R.string.yes, new View.OnClickListener() {
@@ -266,7 +272,7 @@ public class ConversionsFragment extends Fragment {
      * Подписаться UI на изменения
      * @param viewModel объект {@link androidx.lifecycle.ViewModel}
      */
-    private void subscribeUi(final ConversionsViewModel viewModel) {
+    private void subscribeUi(ConversionsViewModel viewModel) {
 
         viewModel.getConversions().observe(getViewLifecycleOwner(), new Observer<List<ConversionEntity>>() {
             @Override
@@ -316,6 +322,17 @@ public class ConversionsFragment extends Fragment {
                     setConversionValueUI(mBinding.clDir, inputCode, false);
 
                     mBinding.executePendingBindings();
+                }
+            }
+        });
+
+        viewModel.getSuggestions().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                if (value) {
+                    mBinding.tietInput.setInputType(YES_SUGGESTIONS);
+                } else {
+                    mBinding.tietInput.setInputType(NO_SUGGESTIONS);
                 }
             }
         });

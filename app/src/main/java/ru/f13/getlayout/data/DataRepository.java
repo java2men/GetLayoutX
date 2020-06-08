@@ -151,31 +151,39 @@ public class DataRepository {
         mAppPreferences.setNotExitAlert(value);
     }
 
-
     /**
      * Получить настройку "использовать темную тему" с уведомлением о получении
-     * @return объект {@link LiveData}
+     * @return объект {@link LiveData},
+     * true - использовать темную тему, false - использовать светлую тему
      */
     public LiveData<Boolean> getDarkTheme() {
         return mAppPreferences.getDarkTheme();
     }
 
-//    /**
-//     * Получить значение настройки "использовать темную тему"
-//     * @return true - используется темная тема, false - не используется темная тема
-//     */
-//    public boolean getDarkThemeValue() {
-//        return mAppPreferences.getDarkThemeValue();
-//    }
-
     /**
      * Установить настройку "использовать темную тему"
-     * @param value true - не уведомлять о выходе, false - уведомлять о выходе
+     * @param value true - использовать темную тему, false - использовать светлую тему
      */
     public void setDarkTheme(boolean value) {
         mAppPreferences.setDarkTheme(value);
     }
 
+    /**
+     * Получить настройку "подсказки клавиатуры" с уведомлением о получении
+     * @return объект {@link LiveData},
+     * true - подсказывать клавиаутуре, false - не подсказывать клавиатуре
+     */
+    public LiveData<Boolean> getSuggestions() {
+        return mAppPreferences.getSuggestions();
+    }
+
+    /**
+     * Установить настройку "подсказки клавиатуры"
+     * @param value true - подсказывать клавиаутуре, false - не подсказывать клавиатуре
+     */
+    public void setSuggestions(boolean value) {
+        mAppPreferences.setSuggestions(value);
+    }
 
     /**
      * Получить настройки "опции конвертаций" с уведомлением о получении

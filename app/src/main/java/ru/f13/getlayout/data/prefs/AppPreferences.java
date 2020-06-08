@@ -20,6 +20,8 @@ public class AppPreferences {
     public static String PREF_KEY_NOT_KEYBOARD_START = "pref_key_not_keyboard_start";
     public static String PREF_KEY_EXIT_ALERT = "pref_key_exit_alert";
     public static String PREF_KEY_DARK_THEME = "pref_key_dark_theme";
+    public static String PREF_KEY_SUGGESTIONS = "pref_key_suggestions";
+
     public static String PREF_KEY_FONT_SIZE = "pref_key_font_size";
     public static String PREF_KEY_THEME = "pref_key_theme";
     public static String PREF_KEY_ABOUT = "pref_key_about";
@@ -147,6 +149,7 @@ public class AppPreferences {
      * Получить значение настройки "использовать темную тему"
      * @return true - используется темная тема, false - не используется темная тема
      */
+    @Deprecated
     public boolean getDarkThemeValue() {
         return sharedPreferences.getBoolean(PREF_KEY_DARK_THEME, false);
     }
@@ -167,6 +170,32 @@ public class AppPreferences {
         editor.remove(PREF_KEY_DARK_THEME);
         editor.commit();
     }
+
+    /**
+     * Получить настройку "подсказки клавиатуры"
+     * @return объект {@link SharedPreferenceBooleanLiveData}
+     */
+    public SharedPreferenceBooleanLiveData getSuggestions() {
+        return new SharedPreferenceBooleanLiveData(sharedPreferences, PREF_KEY_SUGGESTIONS, false);
+    }
+
+    /**
+     * Установить настройку "подсказки клавиатуры"
+     * @param value true - не уведомлять, false - уведомлять
+     */
+    public void setSuggestions(boolean value) {
+        editor.putBoolean(PREF_KEY_SUGGESTIONS, value);
+        editor.commit();
+    }
+
+    /**
+     * Удалить настройку "подсказки клавиатуры"
+     */
+    public void deleteSuggestions(){
+        editor.remove(PREF_KEY_SUGGESTIONS);
+        editor.commit();
+    }
+
 
 
 

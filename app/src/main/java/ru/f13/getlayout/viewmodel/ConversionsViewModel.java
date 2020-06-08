@@ -124,4 +124,13 @@ public class ConversionsViewModel extends AndroidViewModel {
         mRepository.deleteConversionOptions();
     }
 
+    /**
+     * Получить настройку "подсказки клавиатуры" с уведомлением о получении
+     * @return объект {@link LiveData}, true - подсказывать клавиаутуре,
+     * false - не подсказывать клавиатуре
+     */
+    public LiveData<Boolean> getSuggestions() {
+        return mRepository.getSuggestions();
+    }
+
 }

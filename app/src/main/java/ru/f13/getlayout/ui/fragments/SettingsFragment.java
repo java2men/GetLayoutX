@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -25,7 +26,7 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false);
@@ -62,6 +63,13 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        mBinding.clSuggestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBinding.cbSuggestions.performClick();
+            }
+        });
+
 
         mBinding.cbSaveData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +92,13 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        mBinding.cbSuggestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.setSuggestions(((CheckBox)v).isChecked());
+            }
+        });
+
         subscribeUi(viewModel);
     }
 
@@ -93,7 +108,7 @@ public class SettingsFragment extends Fragment {
      */
     private void subscribeUi(SettingsViewModel viewModel) {
 
-        viewModel.getSaveData().observe(this, new Observer<Boolean>() {
+        viewModel.getSaveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 mBinding.setIsSaveData(value);
@@ -101,7 +116,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        viewModel.getNotExitAlert().observe(this, new Observer<Boolean>() {
+        viewModel.getNotExitAlert().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 mBinding.setIsNotExitAlert(value);
@@ -109,10 +124,18 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        viewModel.getDarkTheme().observe(this, new Observer<Boolean>() {
+        viewModel.getDarkTheme().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 mBinding.setIsDarkTheme(value);
+                mBinding.executePendingBindings();
+            }
+        });
+
+        viewModel.getSuggestions().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                mBinding.setIsSuggestions(value);
                 mBinding.executePendingBindings();
             }
         });

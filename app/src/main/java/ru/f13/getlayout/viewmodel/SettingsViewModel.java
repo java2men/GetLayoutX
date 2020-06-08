@@ -57,7 +57,8 @@ public class SettingsViewModel extends AndroidViewModel {
 
     /**
      * Получить значение настройки "использовать темную тему" с уведомлением о получении
-     * @return объект {@link LiveData}
+     * @return объект {@link LiveData},
+     * true - использовать темную тему, false - использовать светлую тему
      */
     public LiveData<Boolean> getDarkTheme() {
         return mRepository.getDarkTheme();
@@ -65,10 +66,27 @@ public class SettingsViewModel extends AndroidViewModel {
 
     /**
      * Установить значение настройки "использовать темную тему"
-     * @param value true - не уведомлять о выходе, false - уведомлять о выходе
+     * @param value true - использовать темную тему, false - использовать светлую тему
      */
     public void setDarkTheme(boolean value) {
         mRepository.setDarkTheme(value);
+    }
+
+    /**
+     * Получить настройку "подсказки клавиатуры" с уведомлением о получении
+     * @return объект {@link LiveData},
+     * true - подсказывать клавиаутуре, false - не подсказывать клавиатуре
+     */
+    public LiveData<Boolean> getSuggestions() {
+        return mRepository.getSuggestions();
+    }
+
+    /**
+     * Установить настройку "подсказки клавиатуры"
+     * @param value true - подсказывать клавиаутуре, false - не подсказывать клавиатуре
+     */
+    public void setSuggestions(boolean value) {
+        mRepository.setSuggestions(value);
     }
 
 }

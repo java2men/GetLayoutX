@@ -15,6 +15,10 @@
         <variable
             name="isDarkTheme"
             type="boolean" />
+
+        <variable
+            name="isSuggestions"
+            type="boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -184,6 +188,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@{isDarkTheme}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clSuggestions"
+            style="@style/RippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clDarkTheme">
+
+
+            <TextView
+                android:id="@+id/tvTitleSuggestions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/suggestions_title"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="@color/material_on_surface_emphasis_high_type"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/tvSummarySuggestions"
+                app:layout_constraintEnd_toStartOf="@+id/cbSuggestions"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvSummarySuggestions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/suggestions_summary"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="@color/material_on_surface_emphasis_medium"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cbSuggestions"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitleSuggestions" />
+
+            <CheckBox
+                android:id="@+id/cbSuggestions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{isSuggestions}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
