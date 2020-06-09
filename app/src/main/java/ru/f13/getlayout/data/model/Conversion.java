@@ -7,6 +7,8 @@ public interface Conversion {
 
     Integer getId();
 
+    String getIdText();
+
     Long getDate();
 
     String getDateText();

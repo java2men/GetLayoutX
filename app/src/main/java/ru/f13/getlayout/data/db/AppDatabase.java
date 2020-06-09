@@ -43,7 +43,7 @@ public abstract class AppDatabase extends RoomDatabase {
     /**
      * Имя база данных
      */
-    public static final String DATABASE_NAME = "get-layout-db";
+    private static final String DATABASE_NAME = "get-layout-db";
 
     public abstract ConversionDao conversionDao();
 
@@ -120,6 +120,18 @@ public abstract class AppDatabase extends RoomDatabase {
      */
     public LiveData<Boolean> getDatabaseCreated() {
         return mIsDatabaseCreated;
+    }
+
+    /**
+     * Обновить seq до нуля, т.е. сбросить auto-generated foreign key до нуля
+     */
+    public void updateSeqZeroConversions() {
+        try {
+            getOpenHelper().getWritableDatabase().
+                    execSQL("update sqlite_sequence set seq=0 where name='conversions'");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

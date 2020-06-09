@@ -101,7 +101,10 @@ public class DataRepository {
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 mDatabase.conversionDao().deleteAllConversions();
+                //сбросить auto-generated foreign key до 0
+                mDatabase.updateSeqZeroConversions();
             }
         }).start();
     }

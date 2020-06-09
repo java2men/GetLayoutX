@@ -44,6 +44,15 @@ public class ConversionEntity implements Conversion {
     }
 
     /**
+     * Получить текстовое значение id
+     * @return текстовое значение id
+     */
+    @Override
+    public String getIdText() {
+        return String.valueOf(getId());
+    }
+
+    /**
      * Получить дату создания конвертации в милисекундах
      * @return дата в милисекундах
      */

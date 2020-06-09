@@ -153,9 +153,8 @@ public class ConversionsFragment extends Fragment {
             @Override
             public void onDelete(final int id, String dateText) {
 
-                //Context context = mBinding.rvConversions.getContext();
                 Snackbar snackbar = Snackbar.
-                        make(mBinding.mcvInput, getString(R.string.delete_for, dateText), Snackbar.LENGTH_LONG).
+                        make(mBinding.mcvInput, getString(R.string.delete_for, String.valueOf(id)), Snackbar.LENGTH_LONG).
                         //setActionTextColor(ContextCompat.getColorStateList(context, R.color.white_50)).
                         setAction(R.string.yes, new View.OnClickListener() {
                             @Override
