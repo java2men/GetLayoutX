@@ -9,8 +9,8 @@ android {
         applicationId "ru.f13.getlayout"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 9
-        versionName "3.5-b1"
+        versionCode 10
+        versionName "3.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables {
